@@ -1,15 +1,185 @@
-import {describe,expect,it} from 'vitest';
-import {generatePrivateKey,privateKeyToAccount} from 'viem/accounts';
-import {hashTypedData,type Hex} from 'viem';
-import {analyze,approvalDigest,compareConditions,createRfq,hash,newId,parse,paymentPayload,preparePayment,quoteDigest,quotePayload,requestSchema,units,verifyQuote,type Quote,type SignedQuote,type Vendor} from './index.js';
-const account=privateKeyToAccount(generatePrivateKey());
-const vendor:Vendor={id:'a',name:'Atlas',signer:account.address,payee:account.address,amountBaseUnits:'800000',deliverySeconds:20};
-export async function signedFixture(){const rfq=createRfq({fixture:'customers',budget:'2',maxDeliverySeconds:60,scenario:'honest'},account.address);const at=rfq.createdAt;const terms={schemaVersion:1 as const,sku:rfq.sku,inputHash:rfq.inputHash,analyzerVersion:'1' as const,deliveryWithinSeconds:20,permittedUse:'buyer-internal-use' as const};const quote:Quote={rfqId:rfq.rfqId,rfqHash:hash(rfq),quoteId:newId(),buyer:rfq.buyer,vendorSigner:account.address,payee:account.address,token:rfq.token,amountBaseUnits:'800000',quantity:'1',skuHash:hash(rfq.sku),inputHash:rfq.inputHash,termsHash:hash(terms),issuedAt:at,validUntil:at+600,nonce:newId()};const signed:SignedQuote={vendorId:'a',quote,terms,signature:await account.signTypedData(quotePayload(quote))};return {rfq,signed};}
-describe('exact values and cryptographic binding',()=>{
- it('converts money without rounding',()=>{expect(units('1.000001')).toBe(1000001n);for(const v of ['0','-1','1e2','1.0000001','01','Infinity','1.'])expect(()=>units(v)).toThrow();expect(()=>parse(requestSchema,{fixture:'customers',budget:'1',maxDeliverySeconds:10,scenario:'honest',payee:account.address})).toThrow();});
- it('matches the published EIP-712 Mail vector',()=>{expect(hashTypedData({domain:{name:'Ether Mail',version:'1',chainId:1,verifyingContract:'0xCcCCccccCCCCcCCCCCCcCcCccCcCCCcCcccccccC'},types:{Person:[{name:'name',type:'string'},{name:'wallet',type:'address'}],Mail:[{name:'from',type:'Person'},{name:'to',type:'Person'},{name:'contents',type:'string'}]},primaryType:'Mail',message:{from:{name:'Cow',wallet:'0xCD2a3d9F938E13CD947Ec05AbC7FE734Df8DD826'},to:{name:'Bob',wallet:'0xbBbBBBBbbBBBbbbBbbBbbbbBBbBbbbbBbBbbBBbB'},contents:'Hello, Bob!'}})).toBe('0xbe609aee343fb3c4b28e1df9e632fca64fcfaede20f02e86244efddf30957bd2');});
- it('accepts authentic quotes and rejects economic mutations',async()=>{const {rfq,signed}=await signedFixture();expect(await verifyQuote(signed,rfq,vendor)).toBe(quoteDigest(signed.quote));for(const [field,value] of Object.entries({amountBaseUnits:'900000',payee:privateKeyToAccount(generatePrivateKey()).address,buyer:privateKeyToAccount(generatePrivateKey()).address,rfqId:newId(),inputHash:newId(),validUntil:rfq.createdAt-1,nonce:newId()})){const altered=structuredClone(signed);Object.assign(altered.quote,{[field]:value});await expect(verifyQuote(altered,rfq,vendor)).rejects.toThrow();expect(compareConditions(signed,altered)).toContain(field);}});
- it('rejects different requests and changed term preimages',async()=>{const {rfq,signed}=await signedFixture();await expect(verifyQuote(signed,{...rfq,quantity:2} as unknown as typeof rfq,vendor)).rejects.toThrow();await expect(verifyQuote({...signed,terms:{...signed.terms,deliveryWithinSeconds:1}},rfq,vendor)).rejects.toThrow();});
- it('changes approval and payment hashes on altered fees/recipient',async()=>{const {rfq,signed}=await signedFixture();const p=preparePayment(rfq,signed);expect(approvalDigest(p)).not.toBe(approvalDigest({...p,payerMaxDebitBaseUnits:'999999'}));expect(hashTypedData(paymentPayload(p))).not.toBe(hashTypedData(paymentPayload({...p,payee:newId().slice(0,42) as Hex})));});
- it('canonicalizes key order and produces a real report',()=>{expect(hash({b:2,a:1})).toBe(hash({a:1,b:2}));expect(analyze('customers')).toMatchObject({rowCount:4,duplicateCount:1,missingFieldCount:2});});
+import { describe, expect, it } from "vitest";
+import { generatePrivateKey, privateKeyToAccount } from "viem/accounts";
+import { hashTypedData, type Hex } from "viem";
+import {
+  analyze,
+  approvalDigest,
+  compareConditions,
+  createRfq,
+  hash,
+  newId,
+  parse,
+  paymentPayload,
+  preparePayment,
+  quoteDigest,
+  quotePayload,
+  requestSchema,
+  units,
+  verifyQuote,
+  type Quote,
+  type SignedQuote,
+  type Vendor,
+} from "./index.js";
+const account = privateKeyToAccount(generatePrivateKey());
+const vendor: Vendor = {
+  id: "a",
+  name: "Atlas",
+  signer: account.address,
+  payee: account.address,
+  amountBaseUnits: "800000",
+  deliverySeconds: 20,
+};
+export async function signedFixture() {
+  const rfq = createRfq(
+    {
+      fixture: "customers",
+      budget: "2",
+      maxDeliverySeconds: 60,
+      scenario: "honest",
+    },
+    account.address,
+  );
+  const at = rfq.createdAt;
+  const terms = {
+    schemaVersion: 1 as const,
+    sku: rfq.sku,
+    inputHash: rfq.inputHash,
+    analyzerVersion: "1" as const,
+    deliveryWithinSeconds: 20,
+    permittedUse: "buyer-internal-use" as const,
+  };
+  const quote: Quote = {
+    rfqId: rfq.rfqId,
+    rfqHash: hash(rfq),
+    quoteId: newId(),
+    buyer: rfq.buyer,
+    vendorSigner: account.address,
+    payee: account.address,
+    token: rfq.token,
+    amountBaseUnits: "800000",
+    quantity: "1",
+    skuHash: hash(rfq.sku),
+    inputHash: rfq.inputHash,
+    termsHash: hash(terms),
+    issuedAt: at,
+    validUntil: at + 600,
+    nonce: newId(),
+  };
+  const signed: SignedQuote = {
+    vendorId: "a",
+    quote,
+    terms,
+    signature: await account.signTypedData(quotePayload(quote)),
+  };
+  return { rfq, signed };
+}
+describe("exact values and cryptographic binding", () => {
+  it("converts money without rounding", () => {
+    expect(units("1.000001")).toBe(1000001n);
+    for (const v of ["0", "-1", "1e2", "1.0000001", "01", "Infinity", "1."])
+      expect(() => units(v)).toThrow();
+    expect(() =>
+      parse(requestSchema, {
+        fixture: "customers",
+        budget: "1",
+        maxDeliverySeconds: 10,
+        scenario: "honest",
+        payee: account.address,
+      }),
+    ).toThrow();
+  });
+  it("matches the published EIP-712 Mail vector", () => {
+    expect(
+      hashTypedData({
+        domain: {
+          name: "Ether Mail",
+          version: "1",
+          chainId: 1,
+          verifyingContract: "0xCcCCccccCCCCcCCCCCCcCcCccCcCCCcCcccccccC",
+        },
+        types: {
+          Person: [
+            { name: "name", type: "string" },
+            { name: "wallet", type: "address" },
+          ],
+          Mail: [
+            { name: "from", type: "Person" },
+            { name: "to", type: "Person" },
+            { name: "contents", type: "string" },
+          ],
+        },
+        primaryType: "Mail",
+        message: {
+          from: {
+            name: "Cow",
+            wallet: "0xCD2a3d9F938E13CD947Ec05AbC7FE734Df8DD826",
+          },
+          to: {
+            name: "Bob",
+            wallet: "0xbBbBBBBbbBBBbbbBbbBbbbbBBbBbbbbBbBbbBBbB",
+          },
+          contents: "Hello, Bob!",
+        },
+      }),
+    ).toBe(
+      "0xbe609aee343fb3c4b28e1df9e632fca64fcfaede20f02e86244efddf30957bd2",
+    );
+  });
+  it("accepts authentic quotes and rejects economic mutations", async () => {
+    const { rfq, signed } = await signedFixture();
+    expect(await verifyQuote(signed, rfq, vendor)).toBe(
+      quoteDigest(signed.quote),
+    );
+    for (const [field, value] of Object.entries({
+      amountBaseUnits: "900000",
+      payee: privateKeyToAccount(generatePrivateKey()).address,
+      buyer: privateKeyToAccount(generatePrivateKey()).address,
+      rfqId: newId(),
+      inputHash: newId(),
+      validUntil: rfq.createdAt - 1,
+      nonce: newId(),
+    })) {
+      const altered = structuredClone(signed);
+      Object.assign(altered.quote, { [field]: value });
+      await expect(verifyQuote(altered, rfq, vendor)).rejects.toThrow();
+      expect(compareConditions(signed, altered)).toContain(field);
+    }
+  });
+  it("rejects different requests and changed term preimages", async () => {
+    const { rfq, signed } = await signedFixture();
+    await expect(
+      verifyQuote(
+        signed,
+        { ...rfq, quantity: 2 } as unknown as typeof rfq,
+        vendor,
+      ),
+    ).rejects.toThrow();
+    await expect(
+      verifyQuote(
+        { ...signed, terms: { ...signed.terms, deliveryWithinSeconds: 1 } },
+        rfq,
+        vendor,
+      ),
+    ).rejects.toThrow();
+  });
+  it("changes approval and payment hashes on altered fees/recipient", async () => {
+    const { rfq, signed } = await signedFixture();
+    const p = preparePayment(rfq, signed);
+    expect(approvalDigest(p)).not.toBe(
+      approvalDigest({ ...p, payerMaxDebitBaseUnits: "999999" }),
+    );
+    expect(hashTypedData(paymentPayload(p))).not.toBe(
+      hashTypedData(
+        paymentPayload({ ...p, payee: newId().slice(0, 42) as Hex }),
+      ),
+    );
+  });
+  it("canonicalizes key order and produces a real report", () => {
+    expect(hash({ b: 2, a: 1 })).toBe(hash({ a: 1, b: 2 }));
+    expect(analyze("customers")).toMatchObject({
+      rowCount: 4,
+      duplicateCount: 1,
+      missingFieldCount: 2,
+    });
+  });
 });

@@ -7,6 +7,13 @@ export class Store {
     if (path !== ":memory:")
       mkdirSync(dirname(path), { recursive: true, mode: 0o700 });
     this.db = new DatabaseSync(path);
+    const schemaVersion = Number(
+      this.db.prepare("PRAGMA user_version").get()?.user_version,
+    );
+    if (schemaVersion !== 0 && schemaVersion !== 1) {
+      this.db.close();
+      throw new Error("Unsupported database schema version");
+    }
     this.db
       .exec(`PRAGMA foreign_keys=ON; PRAGMA journal_mode=WAL; PRAGMA synchronous=FULL; PRAGMA busy_timeout=3000;
  CREATE TABLE IF NOT EXISTS documents(kind TEXT NOT NULL,id TEXT NOT NULL,owner TEXT NOT NULL,data TEXT NOT NULL,version INTEGER NOT NULL DEFAULT 1,PRIMARY KEY(kind,id));

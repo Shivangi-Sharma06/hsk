@@ -12,6 +12,9 @@ import {
   nowSeconds,
   parse,
   paymentPayload,
+  preparePayment,
+  preparedSchema,
+  scenarioSchema,
   quoteDigest,
   quotePayload,
   rfqSchema,
@@ -53,11 +56,9 @@ export function vendorApp(options: {
       return reply.code(401).send({ error: "Unauthorized peer" });
   });
   app.setErrorHandler((error, _req, reply) => {
-    reply
-      .code(400)
-      .send({
-        error: error instanceof Error ? error.message : "Vendor request failed",
-      });
+    reply.code(400).send({
+      error: error instanceof Error ? error.message : "Vendor request failed",
+    });
   });
   app.get("/health/live", async () => ({ ok: true, profile: "local" }));
   app.post<{ Params: { id: string }; Body: { rfq: Rfq; scenario: Scenario } }>(
@@ -74,10 +75,7 @@ export function vendorApp(options: {
         return previous.signed;
       }
       if (rfq.collectionClosesAt < nowSeconds()) throw new Error("RFQ closed");
-      const scenario = parse(
-        (await import("@proofbid/domain")).scenarioSchema,
-        req.body.scenario,
-      );
+      const scenario = parse(scenarioSchema, req.body.scenario);
       const terms = {
         schemaVersion: 1 as const,
         sku: rfq.sku,
@@ -138,6 +136,7 @@ export function vendorApp(options: {
     Body: { prepared: PreparedPayment; signature: Hex; signed: SignedQuote };
   }>("/simulator/payments", async (req) => {
     const { prepared: p, signature, signed } = req.body;
+    parse(preparedSchema, p);
     const profile = secrets.vendors.find((v) => v.id === signed.vendorId);
     if (!profile) throw new Error("Unknown vendor");
     const record = store.get<VendorRecord>(
@@ -157,6 +156,13 @@ export function vendorApp(options: {
     await verifyQuote(signed, record.rfq, profile, nowSeconds(), 0);
     if (compareConditions(record.signed, signed).length)
       throw new Error("Changed quote");
+    const expected = {
+      ...preparePayment(record.rfq, signed),
+      attemptId: p.attemptId,
+      validUntil: p.validUntil,
+    };
+    if (!/^0x[0-9a-f]{64}$/.test(p.attemptId) || hash(expected) !== hash(p))
+      throw new Error("Invalid payment preparation");
     if (
       p.providerProfile !== "local" ||
       p.validUntil < nowSeconds() ||

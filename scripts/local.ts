@@ -1,4 +1,11 @@
-import { mkdirSync, readFileSync, writeFileSync, existsSync } from "node:fs";
+import {
+  mkdirSync,
+  readFileSync,
+  writeFileSync,
+  existsSync,
+  linkSync,
+  unlinkSync,
+} from "node:fs";
 import { join } from "node:path";
 import { randomBytes } from "node:crypto";
 import { generatePrivateKey, privateKeyToAccount } from "viem/accounts";
@@ -30,11 +37,20 @@ export function localSecrets(dir: string): Secrets {
       };
     }),
   };
-  writeFileSync(path, JSON.stringify(secrets, null, 2), {
+  const temp = `${path}.${randomBytes(8).toString("hex")}.tmp`;
+  writeFileSync(temp, JSON.stringify(secrets, null, 2), {
     mode: 0o600,
     flag: "wx",
   });
-  return secrets;
+  try {
+    linkSync(temp, path);
+    return secrets;
+  } catch (error) {
+    if ((error as NodeJS.ErrnoException).code !== "EEXIST") throw error;
+    return JSON.parse(readFileSync(path, "utf8")) as Secrets;
+  } finally {
+    unlinkSync(temp);
+  }
 }
 export const publicVendors = (s: Secrets): Vendor[] =>
   s.vendors.map(({ privateKey: _privateKey, ...vendor }) => vendor);

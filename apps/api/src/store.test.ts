@@ -28,3 +28,28 @@ it("commits events with data and rolls back on failure; persists after restart",
     rmSync(dir, { recursive: true });
   }
 });
+it("restores a consistent SQLite backup and rejects unknown schema versions", async () => {
+  const { backup, DatabaseSync } = await import("node:sqlite");
+  const dir = mkdtempSync(join(tmpdir(), "proofbid-backup-"));
+  const source = new Store(join(dir, "source.sqlite"));
+  try {
+    source.put("run", "pending", "buyer", { state: "SUBMISSION_UNKNOWN" });
+    await backup(source.db, join(dir, "restore.sqlite"));
+    const restored = new Store(join(dir, "restore.sqlite"));
+    try {
+      expect(restored.get("run", "pending")).toEqual({
+        state: "SUBMISSION_UNKNOWN",
+      });
+    } finally {
+      restored.close();
+    }
+    const futurePath = join(dir, "future.sqlite");
+    const future = new DatabaseSync(futurePath);
+    future.exec("PRAGMA user_version=99");
+    future.close();
+    expect(() => new Store(futurePath)).toThrow(/schema version/);
+  } finally {
+    source.close();
+    rmSync(dir, { recursive: true, force: true });
+  }
+});

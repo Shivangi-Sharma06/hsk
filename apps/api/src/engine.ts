@@ -40,6 +40,7 @@ export class Engine {
   readonly vendors;
   private timer?: ReturnType<typeof setInterval>;
   private working?: Promise<void>;
+  workerError?: string;
   constructor(
     readonly config: ReturnType<typeof readConfig>,
     options: { store?: Store; secrets?: Secrets; vendorOrigin?: string } = {},
@@ -62,8 +63,22 @@ export class Engine {
       body: body === undefined ? undefined : JSON.stringify(body),
       signal: AbortSignal.timeout(2200),
     });
-    const text = await response.text();
-    if (text.length > 65536) throw new Error("Vendor response too large");
+    const reader = response.body?.getReader();
+    if (!reader) throw new Error("Empty vendor response");
+    const decoder = new TextDecoder();
+    let size = 0;
+    let text = "";
+    for (;;) {
+      const part = await reader.read();
+      if (part.done) break;
+      size += part.value.byteLength;
+      if (size > 65536) {
+        await reader.cancel();
+        throw new Error("Vendor response too large");
+      }
+      text += decoder.decode(part.value, { stream: true });
+    }
+    text += decoder.decode();
     const result = JSON.parse(text) as { error?: string };
     if (!response.ok)
       throw new Error(result.error ?? "Receiving agent unavailable");
@@ -361,10 +376,12 @@ export class Engine {
         current.approvalDigest = approvalDigest(prepared);
         current.state = "AWAITING_APPROVAL";
         this.save(current, "Conditions match; payment ready for review");
+        this.store.enqueue("expire", run.id, (prepared.validUntil + 1) * 1000);
       });
     } catch (e) {
       this.store.transaction(() => {
         const current = this.store.get<Run>("run", run.id)!;
+        if (current.state !== "CHECKING_CONDITIONS") return;
         current.state = "READY";
         current.error =
           e instanceof Error ? e.message : "Could not verify conditions";
@@ -406,6 +423,7 @@ export class Engine {
     } catch (e) {
       this.store.transaction(() => {
         const current = this.store.get<Run>("run", run.id)!;
+        if (current.settlement || current.delivery) return;
         current.state = "SUBMISSION_UNKNOWN";
         current.error =
           e instanceof Error ? e.message : "Submission is uncertain";
@@ -415,6 +433,7 @@ export class Engine {
     }
     this.store.transaction(() => {
       const current = this.store.get<Run>("run", run.id)!;
+      if (current.settlement || current.delivery) return;
       current.settlement = settlement;
       current.state = "DELIVERY_PENDING";
       delete current.error;
@@ -454,6 +473,7 @@ export class Engine {
     } catch (e) {
       this.store.transaction(() => {
         const current = this.store.get<Run>("run", run.id)!;
+        if (current.delivery) return;
         current.error = e instanceof Error ? e.message : "Report unavailable";
         if (current.error === "Delivery verification failed")
           current.state = "DELIVERY_REJECTED";
@@ -467,6 +487,26 @@ export class Engine {
       });
       throw e;
     }
+  }
+  expire(run: Run) {
+    if (
+      !run.prepared ||
+      !["AWAITING_APPROVAL", "RESERVED_AWAITING_SIGNATURE"].includes(
+        run.state,
+      ) ||
+      run.prepared.validUntil >= nowSeconds() ||
+      this.store.get("dispatch", run.prepared.attemptId)
+    )
+      return;
+    this.store.transaction(() => {
+      const current = this.store.get<Run>("run", run.id)!;
+      current.state = "EXPIRED_UNPAID";
+      this.store.remove("spend", run.prepared!.attemptId);
+      this.save(
+        current,
+        "Unsubmitted local authorization expired; reservation released",
+      );
+    });
   }
   async workOnce() {
     const job = this.store.transaction(() => {
@@ -485,6 +525,7 @@ export class Engine {
     try {
       const run = this.store.get<Run>("run", job.run_id);
       if (run && run.state !== "CANCELLED") {
+        if (job.kind === "expire") this.expire(run);
         if (job.kind === "collect") await this.collect(run);
         if (job.kind === "conditions") await this.conditions(run);
         if (job.kind === "payment" && !run.settlement) await this.payment(run);
@@ -505,9 +546,18 @@ export class Engine {
     if (this.timer) return;
     this.timer = setInterval(() => {
       if (!this.working)
-        this.working = this.workOnce().finally(() => {
-          this.working = undefined;
-        });
+        this.working = this.workOnce()
+          .then(
+            () => {
+              this.workerError = undefined;
+            },
+            () => {
+              this.workerError = "Worker storage unavailable";
+            },
+          )
+          .finally(() => {
+            this.working = undefined;
+          });
     }, 200);
     this.timer.unref();
   }

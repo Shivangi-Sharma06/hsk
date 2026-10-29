@@ -1,4 +1,5 @@
 import Fastify from "fastify";
+import type { ServerResponse } from "node:http";
 import cookie from "@fastify/cookie";
 import rateLimit from "@fastify/rate-limit";
 import staticFiles from "@fastify/static";
@@ -52,13 +53,18 @@ export function createApp(
     bodyLimit: 65536,
     ajv: { customOptions: { removeAdditional: false, coerceTypes: false } },
   });
+  const streams = new Map<ServerResponse, string>();
   app.register(cookie);
   app.register(rateLimit, { max: 120, timeWindow: "1 minute" });
   app.addHook("onRequest", async (req, reply) => {
     reply
       .header("X-Content-Type-Options", "nosniff")
       .header("Referrer-Policy", "no-referrer")
-      .header("Cache-Control", "no-store");
+      .header("Cache-Control", "no-store")
+      .header(
+        "Content-Security-Policy",
+        "default-src 'self'; connect-src 'self' https://testnet.hsk.xyz; img-src 'self' data:; style-src 'self'; frame-ancestors 'none'; base-uri 'none'; form-action 'self'",
+      );
     if (
       req.method !== "GET" &&
       req.method !== "HEAD" &&
@@ -71,16 +77,14 @@ export function createApp(
       error instanceof AppError
         ? error.status
         : ((error as { statusCode?: number }).statusCode ?? 500);
-    reply
-      .code(status)
-      .send({
-        error:
-          status === 500
-            ? "Request failed safely; check readiness and try again"
-            : error instanceof Error
-              ? error.message
-              : "Invalid request",
-      });
+    reply.code(status).send({
+      error:
+        status === 500
+          ? "Request failed safely; check readiness and try again"
+          : error instanceof Error
+            ? error.message
+            : "Invalid request",
+    });
   });
   const owner = (req: { cookies: Record<string, string | undefined> }) => {
     const raw = req.cookies.proofbid;
@@ -291,6 +295,12 @@ export function createApp(
       let after = Number(req.headers["last-event-id"] ?? 0);
       if (!Number.isSafeInteger(after) || after < 0)
         throw new AppError(400, "Invalid event cursor");
+      if (
+        streams.size >= 40 ||
+        [...streams.values()].filter((v) => v === buyer).length >= 4
+      )
+        throw new AppError(429, "Too many event streams");
+      streams.set(reply.raw, buyer);
       reply.hijack();
       reply.raw.writeHead(200, {
         "Content-Type": "text/event-stream",
@@ -320,6 +330,7 @@ export function createApp(
         }
       };
       const cleanup = () => {
+        streams.delete(reply.raw);
         closed = true;
         clearInterval(timer);
       };
@@ -384,6 +395,10 @@ export function createApp(
   }
   app.addHook("onReady", async () => {
     if (options.startWorker !== false) engine.start();
+  });
+  app.addHook("preClose", async () => {
+    for (const response of streams.keys()) response.end();
+    streams.clear();
   });
   app.addHook("onClose", async () => {
     await engine.stop();

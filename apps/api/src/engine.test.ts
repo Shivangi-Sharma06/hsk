@@ -1,4 +1,5 @@
-import { afterEach, beforeEach, describe, expect, it } from "vitest";
+import { verifyBundle } from "../../../packages/domain/src/proof.js";
+import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { mkdtempSync, rmSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
@@ -142,7 +143,9 @@ describe("durable A2A payment orchestration", () => {
       vendorOrigin = engine.vendorOrigin;
     await engine.stop();
     engine = new Engine(config, { vendorOrigin });
-    engine.store.db.prepare("UPDATE jobs SET due=0,lease=0").run();
+    engine.store.db
+      .prepare("UPDATE jobs SET due=0,lease=0 WHERE kind='payment'")
+      .run();
     await engine.workOnce();
     await engine.workOnce();
     expect(engine.run(id, buyer.address).state).toBe("FULFILLED");
@@ -250,6 +253,26 @@ describe("durable A2A payment orchestration", () => {
     expect(engine.run(id, buyer.address).state).toBe("DELIVERY_REJECTED");
     expect(engine.run(id, buyer.address).settlement).toBeDefined();
   });
+  it("releases only expired undispatched local reservations", async () => {
+    const id = await create();
+    const run = await select(id);
+    engine.approve(
+      buyer.address,
+      id,
+      run.approvalDigest!,
+      run.version,
+      crypto.randomUUID(),
+    );
+    vi.useFakeTimers({ toFake: ["Date"] });
+    try {
+      vi.setSystemTime(Date.now() + 601000);
+      engine.expire(engine.run(id, buyer.address));
+      expect(engine.run(id, buyer.address).state).toBe("EXPIRED_UNPAID");
+      expect(engine.store.list("spend")).toHaveLength(0);
+    } finally {
+      vi.useRealTimers();
+    }
+  });
   it("requires an original fresh sign-in challenge and hides payer signatures in proof", async () => {
     const app = createApp({ engine, startWorker: false });
     const headers = { origin: engine.config.origin };
@@ -284,6 +307,8 @@ describe("durable A2A payment orchestration", () => {
       const id = await create();
       const run = await select(id);
       await authorize(run);
+      await engine.workOnce();
+      await engine.workOnce();
       const proof = await app.inject({
         url: `/api/rfqs/${id}/proof`,
         headers: { cookie },
@@ -294,6 +319,15 @@ describe("durable A2A payment orchestration", () => {
         run.prepared!.attemptId,
       )!.signature;
       expect(proof.body).not.toContain(raw);
+      expect(
+        await verifyBundle(proof.json(), run.selectedQuote!.quote.vendorSigner),
+      ).toMatchObject({
+        quoteSignatureValid: true,
+        deliverySignatureValid: true,
+        vendorPinned: true,
+        chainVerified: false,
+        payerAuthorizationVerified: false,
+      });
       expect(proof.json()).toMatchObject({
         mode: "local",
         chainVerified: false,
