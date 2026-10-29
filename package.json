@@ -16,7 +16,8 @@
     "format": "prettier --write apps packages scripts tests *.json *.yaml",
     "test": "vitest run",
     "test:e2e": "playwright test",
-    "doctor": "tsx scripts/doctor.ts"
+    "doctor": "tsx scripts/doctor.ts",
+    "seed": "tsx scripts/seed.ts"
   },
   "dependencies": {
     "@fastify/cookie": "^11.1.5",
