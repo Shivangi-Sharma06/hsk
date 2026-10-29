@@ -4,6 +4,10 @@ Version 2.0 · 2026-10-30 · Testnet-first; no deadline assumed
 
 This plan implements [PRD](prd.md) and [architecture](architecture.md). It replaces the original contract-first/slashing schedule. Tasks below are future work unless marked complete. Use [HSP discovery](docs/planning/hsp-integration.md), [UI specification](docs/planning/ui.md) and [test matrix](docs/planning/verification.md) as acceptance contracts.
 
+## Current implementation status
+
+The local application is now implemented; see [README](README.md) and [verification results](docs/verification/local-results.md). Foundation, signed domain, receiving agents, durable local orchestration and the basic UI are available. The checklists below remain the full release plan, not a claim that every planned external/security case is complete. Real HSP integration (P7/G5), real chain/callback verification, full operational acceptance and mainnet release remain gated on access and evidence.
+
 ## 1. Execution strategy
 
 Build one safe vertical slice first: a receiving agent's signed conditions → buyer approval → simulator settlement → verified report. Then replace the simulator with the confirmed HSP interface. Expand to three agents and attack/recovery cases before polish. Do not start escrow, slashing, cross-chain routing or multiple payment integrations.
@@ -54,7 +58,7 @@ Start P7's small browser-wallet/API spike as soon as access exists; it can requi
 - [ ] Add `.gitignore` coverage for actual runtime data/artifacts, SQLite DB/WAL/SHM, local secrets and browser-test output without ignoring migrations, fixtures, proof schemas or deployment manifests.
 - [ ] Implement `/health/live`, `/health/ready` and sanitized `/api/config`.
 - [ ] Set Vite dev proxy to API; production API serves web build so browser/API use one origin.
-- [ ] Add commands with these names: `pnpm dev`, `pnpm build`, `pnpm lint`, `pnpm typecheck`, `pnpm test`, `pnpm test:e2e`, `pnpm db:migrate`, `pnpm seed`, `pnpm doctor`, `pnpm smoke`, `pnpm verify:bundle -- <file>`.
+- [ ] Add commands with these names: `pnpm dev`, `pnpm build`, `pnpm lint`, `pnpm typecheck`, `pnpm test`, `pnpm test:e2e`, `pnpm db:migrate`, `pnpm seed`, `pnpm run doctor`, `pnpm smoke`, `pnpm verify:bundle -- <file>`.
 
 **Acceptance:** clean install/build, API/vendor/UI run locally with one command, readiness distinguishes local/real, no private credential in browser config/build. Commands are planned names until implemented.
 
