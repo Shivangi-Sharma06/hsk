@@ -1,3 +1,5 @@
+import { readFile } from "node:fs/promises";
+import { verifyBundle } from "../../packages/domain/src/proof.js";
 import { expect, test } from "@playwright/test";
 test("a signed offer becomes a verified report and survives reload", async ({
   page,
@@ -25,6 +27,18 @@ test("a signed offer becomes a verified report and survives reload", async ({
   await page.getByRole("button", { name: "Download report" }).click();
   const download = await downloadEvent;
   expect(download.suggestedFilename()).toBe("proofbid-report.json");
+  const proofEvent = page.waitForEvent("download");
+  await page.getByRole("button", { name: "Export private proof" }).click();
+  const proofDownload = await proofEvent;
+  const bundle = JSON.parse(
+    await readFile((await proofDownload.path())!, "utf8"),
+  );
+  expect(await verifyBundle(bundle)).toMatchObject({
+    quoteSignatureValid: true,
+    deliverySignatureValid: true,
+    chainVerified: false,
+    payerAuthorizationVerified: false,
+  });
   await page.reload();
   await expect(
     page.getByRole("heading", { name: "Agreement kept. Report verified." }),

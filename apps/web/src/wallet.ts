@@ -1,5 +1,4 @@
-import { createConfig, http } from "wagmi";
-import { injected } from "wagmi/connectors";
+import { createConfig, http, injected } from "wagmi";
 import { defineChain } from "viem";
 export const hashkey = defineChain({
   id: 133,
