@@ -25,7 +25,10 @@
     "contracts:build": "forge build --root contracts",
     "contracts:test": "forge test --root contracts",
     "contracts:coverage": "forge coverage --root contracts",
-    "contracts:check": "forge fmt --root contracts --check"
+    "contracts:check": "forge fmt --root contracts --check",
+    "contracts:prepare": "tsx scripts/anchor.ts prepare",
+    "contracts:deploy": "tsx scripts/anchor.ts deploy",
+    "contracts:verify": "tsx scripts/anchor.ts check"
   },
   "dependencies": {
     "@fastify/cookie": "^11.1.5",
