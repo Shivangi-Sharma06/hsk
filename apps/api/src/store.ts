@@ -31,19 +31,21 @@ export class Store {
       .get(kind, id) as { data: string } | undefined;
     return row ? (JSON.parse(row.data) as T) : undefined;
   }
-  list<T>(kind: string, owner?: string): T[] {
+  list<T>(kind: string, owner?: string, limit = -1): T[] {
+    if (!Number.isSafeInteger(limit) || limit < -1)
+      throw new Error("Invalid document limit");
     const rows =
       owner === undefined
         ? this.db
             .prepare(
-              "SELECT data FROM documents WHERE kind=? ORDER BY rowid DESC",
+              "SELECT data FROM documents WHERE kind=? ORDER BY rowid DESC LIMIT ?",
             )
-            .all(kind)
+            .all(kind, limit)
         : this.db
             .prepare(
-              "SELECT data FROM documents WHERE kind=? AND owner=? ORDER BY rowid DESC",
+              "SELECT data FROM documents WHERE kind=? AND owner=? ORDER BY rowid DESC LIMIT ?",
             )
-            .all(kind, owner);
+            .all(kind, owner, limit);
     return rows.map((r) => JSON.parse(r.data as string) as T);
   }
   put(kind: string, id: string, owner: string, data: unknown) {

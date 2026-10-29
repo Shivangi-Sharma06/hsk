@@ -78,14 +78,19 @@ export function App() {
     queryKey: ["run", runId, buyer],
     queryFn: () => api<PublicRun>(`/rfqs/${runId}`),
     enabled: !!runId && !!buyer,
-    refetchInterval: 1500,
+    refetchInterval: (query) =>
+      query.state.data &&
+      ["FULFILLED", "CANCELLED", "EXPIRED_UNPAID", "NO_VALID_QUOTES"].includes(
+        query.state.data.state,
+      )
+        ? false
+        : 5000,
   });
   const run = runQuery.data;
   const history = useQuery({
     queryKey: ["history", buyer],
     queryFn: () => api<PublicRun[]>("/rfqs"),
-    enabled: !!buyer,
-    refetchInterval: 5000,
+    enabled: !!buyer && historyOpen,
   });
   useEffect(() => {
     if (!runId || !buyer) return;
@@ -97,6 +102,7 @@ export function App() {
         [...old.filter((v) => v.id !== event.id), event].slice(-30),
       );
       void cache.invalidateQueries({ queryKey: ["run", runId] });
+      void cache.invalidateQueries({ queryKey: ["history", buyer] });
     };
     return () => stream.close();
   }, [runId, buyer, cache]);
@@ -218,7 +224,13 @@ export function App() {
         ? 2
         : 3;
   const unpaid =
-    run && ["COLLECTING", "READY", "AWAITING_APPROVAL"].includes(run.state);
+    run &&
+    [
+      "COLLECTING",
+      "READY",
+      "CHECKING_CONDITIONS",
+      "AWAITING_APPROVAL",
+    ].includes(run.state);
   const pending =
     run &&
     [

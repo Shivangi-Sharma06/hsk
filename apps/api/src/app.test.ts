@@ -14,6 +14,15 @@ it("reports simulator readiness and requires owner/origin", async () => {
       profile: "local",
       liveHsp: false,
     });
+    engine.workerError = "Worker storage unavailable";
+    const unhealthy = await app.inject("/health/ready");
+    expect(unhealthy.statusCode).toBe(503);
+    expect(unhealthy.json()).toMatchObject({
+      ok: false,
+      worker: "unavailable",
+    });
+    engine.workerError = undefined;
+    expect((await app.inject("/health/ready")).statusCode).toBe(200);
     expect((await app.inject("/api/rfqs")).statusCode).toBe(401);
     expect(
       (await app.inject({ method: "POST", url: "/api/rfqs", payload: {} }))

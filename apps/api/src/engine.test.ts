@@ -273,6 +273,68 @@ describe("durable A2A payment orchestration", () => {
       vi.useRealTimers();
     }
   });
+  it.each(["honest", "price"] as const)(
+    "does not revive a cancelled request after a late %s conditions reply",
+    async (scenario) => {
+      const id = await create(scenario);
+      const run = engine.run(id, buyer.address);
+      engine.select(
+        buyer.address,
+        id,
+        quoteDigest(run.quotes.find((q) => q.vendorId === "c")!.signed!.quote),
+        run.version,
+        crypto.randomUUID(),
+      );
+      const pending = engine.run(id, buyer.address);
+      const peer = engine.peer.bind(engine);
+      const spy = vi
+        .spyOn(engine, "peer")
+        .mockImplementationOnce(async (path, body) => {
+          const reply = await peer(path, body);
+          engine.cancel(buyer.address, id);
+          return reply;
+        });
+      try {
+        await engine.conditions(pending);
+      } finally {
+        spy.mockRestore();
+      }
+      expect(engine.run(id, buyer.address).state).toBe("CANCELLED");
+      expect(engine.store.list("spend")).toHaveLength(0);
+    },
+  );
+  it("does not release an authorized reservation from a stale expiry snapshot", async () => {
+    const id = await create();
+    const run = await select(id);
+    const approved = engine.approve(
+      buyer.address,
+      id,
+      run.approvalDigest!,
+      run.version,
+      crypto.randomUUID(),
+    );
+    const stale = engine.run(id, buyer.address);
+    const signature = await buyer.signTypedData(
+      paymentPayload(approved.prepared),
+    );
+    await engine.authorize(
+      buyer.address,
+      id,
+      run.approvalDigest!,
+      signature,
+      approved.version,
+      crypto.randomUUID(),
+    );
+    vi.useFakeTimers({ toFake: ["Date"] });
+    try {
+      vi.setSystemTime((approved.prepared.validUntil + 1) * 1000);
+      engine.expire(stale);
+      expect(engine.run(id, buyer.address).state).toBe("SUBMITTING");
+      expect(engine.store.list("spend")).toHaveLength(1);
+    } finally {
+      vi.useRealTimers();
+    }
+  });
   it("requires an original fresh sign-in challenge and hides payer signatures in proof", async () => {
     const app = createApp({ engine, startWorker: false });
     const headers = { origin: engine.config.origin };

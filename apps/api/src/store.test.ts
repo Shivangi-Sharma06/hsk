@@ -53,3 +53,21 @@ it("restores a consistent SQLite backup and rejects unknown schema versions", as
     rmSync(dir, { recursive: true, force: true });
   }
 });
+
+it("bounds history in SQL and isolates owners before applying the limit", () => {
+  const store = new Store(":memory:");
+  try {
+    for (let i = 0; i < 80; i++)
+      store.put("run", String(i), i % 2 ? "alice" : "bob", { id: i });
+    expect(store.list<{ id: number }>("run", "alice", 3)).toEqual([
+      { id: 79 },
+      { id: 77 },
+      { id: 75 },
+    ]);
+    expect(store.list("run", "alice", 0)).toEqual([]);
+    expect(store.list("run", "nobody", 50)).toEqual([]);
+    expect(() => store.list("run", "alice", -2)).toThrow();
+  } finally {
+    store.close();
+  }
+});

@@ -294,7 +294,14 @@ export class Engine {
   cancel(buyer: string, id: string) {
     this.store.transaction(() => {
       const run = this.run(id, buyer);
-      if (!["COLLECTING", "READY", "AWAITING_APPROVAL"].includes(run.state))
+      if (
+        ![
+          "COLLECTING",
+          "READY",
+          "CHECKING_CONDITIONS",
+          "AWAITING_APPROVAL",
+        ].includes(run.state)
+      )
         throw new AppError(
           409,
           "A signature may still execute; this payment cannot be reset or cancelled locally",
@@ -350,6 +357,11 @@ export class Engine {
       if (mismatches.length) {
         this.store.transaction(() => {
           const current = this.store.get<Run>("run", run.id)!;
+          if (
+            current.state !== "CHECKING_CONDITIONS" ||
+            current.version !== run.version
+          )
+            return;
           current.state = "READY";
           current.mismatches = mismatches;
           current.error = `Receiving agent changed ${mismatches.join(", ")}. No wallet signature requested.`;
@@ -371,7 +383,11 @@ export class Engine {
       const prepared = preparePayment(run.rfq, received);
       this.store.transaction(() => {
         const current = this.store.get<Run>("run", run.id)!;
-        if (current.state !== "CHECKING_CONDITIONS") return;
+        if (
+          current.state !== "CHECKING_CONDITIONS" ||
+          current.version !== run.version
+        )
+          return;
         current.prepared = prepared;
         current.approvalDigest = approvalDigest(prepared);
         current.state = "AWAITING_APPROVAL";
@@ -381,7 +397,11 @@ export class Engine {
     } catch (e) {
       this.store.transaction(() => {
         const current = this.store.get<Run>("run", run.id)!;
-        if (current.state !== "CHECKING_CONDITIONS") return;
+        if (
+          current.state !== "CHECKING_CONDITIONS" ||
+          current.version !== run.version
+        )
+          return;
         current.state = "READY";
         current.error =
           e instanceof Error ? e.message : "Could not verify conditions";
@@ -489,19 +509,19 @@ export class Engine {
     }
   }
   expire(run: Run) {
-    if (
-      !run.prepared ||
-      !["AWAITING_APPROVAL", "RESERVED_AWAITING_SIGNATURE"].includes(
-        run.state,
-      ) ||
-      run.prepared.validUntil >= nowSeconds() ||
-      this.store.get("dispatch", run.prepared.attemptId)
-    )
-      return;
     this.store.transaction(() => {
-      const current = this.store.get<Run>("run", run.id)!;
+      const current = this.store.get<Run>("run", run.id);
+      if (
+        !current?.prepared ||
+        !["AWAITING_APPROVAL", "RESERVED_AWAITING_SIGNATURE"].includes(
+          current.state,
+        ) ||
+        current.prepared.validUntil >= nowSeconds() ||
+        this.store.get("dispatch", current.prepared.attemptId)
+      )
+        return;
       current.state = "EXPIRED_UNPAID";
-      this.store.remove("spend", run.prepared!.attemptId);
+      this.store.remove("spend", current.prepared.attemptId);
       this.save(
         current,
         "Unsubmitted local authorization expired; reservation released",
@@ -526,8 +546,10 @@ export class Engine {
       const run = this.store.get<Run>("run", job.run_id);
       if (run && run.state !== "CANCELLED") {
         if (job.kind === "expire") this.expire(run);
-        if (job.kind === "collect") await this.collect(run);
-        if (job.kind === "conditions") await this.conditions(run);
+        if (job.kind === "collect" && run.state === "COLLECTING")
+          await this.collect(run);
+        if (job.kind === "conditions" && run.state === "CHECKING_CONDITIONS")
+          await this.conditions(run);
         if (job.kind === "payment" && !run.settlement) await this.payment(run);
         if (job.kind === "delivery" && run.settlement && !run.delivery)
           await this.deliver(run);

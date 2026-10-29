@@ -96,12 +96,17 @@ export function createApp(
   const key = (req: { headers: Record<string, unknown> }) =>
     String(req.headers["idempotency-key"] ?? "");
   app.get("/health/live", async () => ({ ok: true }));
-  app.get("/health/ready", async () => ({
-    ok: store.db.isOpen,
-    profile: "local",
-    liveHsp: false,
-    mainnet: false,
-  }));
+  app.get("/health/ready", async (_req, reply) => {
+    const ok = store.db.isOpen && !engine.workerError;
+    reply.code(ok ? 200 : 503);
+    return {
+      ok,
+      profile: "local",
+      liveHsp: false,
+      mainnet: false,
+      worker: engine.workerError ? "unavailable" : "ready",
+    };
+  });
   app.get("/api/config", async () => ({
     profile: "local",
     liveHsp: false,
@@ -211,7 +216,7 @@ export function createApp(
     },
   );
   app.get("/api/rfqs", async (req) =>
-    store.list<Run>("run", owner(req)).slice(0, 50).map(publicRun),
+    store.list<Run>("run", owner(req), 50).map(publicRun),
   );
   app.get<{ Params: { id: string } }>("/api/rfqs/:id", async (req) =>
     publicRun(engine.run(req.params.id, owner(req))),
