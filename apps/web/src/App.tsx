@@ -74,6 +74,14 @@ export function App() {
     },
   });
   const buyer = session.data?.buyer;
+  const signer = demo?.address ?? wallet.address;
+  const walletIssue = buyer
+    ? !signer || signer.toLowerCase() !== buyer.toLowerCase()
+      ? "Connect the wallet that owns this request to sign a payment."
+      : !demo && wallet.chainId !== 133
+        ? "Switch your wallet to HashKey Testnet to sign a payment."
+        : ""
+    : "";
   const runQuery = useQuery({
     queryKey: ["run", runId, buyer],
     queryFn: () => api<PublicRun>(`/rfqs/${runId}`),
@@ -128,11 +136,11 @@ export function App() {
     setError("");
     try {
       await fn();
-      await cache.invalidateQueries({ queryKey: ["run"] });
-      await cache.invalidateQueries({ queryKey: ["history"] });
     } catch (e) {
       setError(e instanceof Error ? e.message : "Something went wrong");
     } finally {
+      await cache.invalidateQueries({ queryKey: ["run"] });
+      await cache.invalidateQueries({ queryKey: ["history"] });
       setBusy("");
     }
   }
@@ -192,9 +200,16 @@ export function App() {
         prepared = reservation.prepared;
         version = reservation.version;
       }
+      if (hash(prepared) !== run.approvalDigest)
+        throw new Error(
+          "Payment review changed. Refresh and inspect the conditions before signing.",
+        );
       const signature = demo
         ? await demo.signTypedData(paymentPayload(prepared))
-        : await signTypedDataAsync(paymentPayload(prepared));
+        : await signTypedDataAsync({
+            ...paymentPayload(prepared),
+            account: prepared.payer,
+          });
       await api(`/rfqs/${run.id}/authorize`, {
         approvalDigest: hash(prepared),
         version,
@@ -329,6 +344,11 @@ export function App() {
         </button>
       </nav>
       <div aria-live="polite">
+        {walletIssue && (
+          <div role="status" className="alert">
+            {walletIssue} Existing payments remain visible.
+          </div>
+        )}
         {error && (
           <div role="alert" className="alert">
             <strong>Action stopped.</strong> {error}
@@ -683,7 +703,7 @@ export function App() {
                             <button
                               className="primary full"
                               onClick={() => void signPayment()}
-                              disabled={!!busy}
+                              disabled={!!busy || !!walletIssue}
                             >
                               {busy ||
                                 (run.state === "RESERVED_AWAITING_SIGNATURE"

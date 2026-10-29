@@ -95,3 +95,30 @@ test("reconciles lost payment response without another approval", async ({
     page.getByRole("button", { name: "Review & sign payment" }),
   ).toHaveCount(0);
 });
+
+test("stops before signing when the reserved payment differs from the review", async ({
+  page,
+}) => {
+  let authorizations = 0;
+  page.on("request", (request) => {
+    if (request.url().endsWith("/authorize")) authorizations++;
+  });
+  await page.route("**/api/rfqs/*/approve", async (route) => {
+    const response = await route.fetch();
+    const body = await response.json();
+    body.prepared.payerMaxDebitBaseUnits = String(
+      BigInt(body.prepared.payerMaxDebitBaseUnits) + 1n,
+    );
+    await route.fulfill({ response, json: body });
+  });
+  await page.goto("/");
+  await page.getByRole("button", { name: "Create demo wallet" }).click();
+  await page.getByRole("button", { name: "Get signed offers" }).click();
+  await page.getByRole("button", { name: "Select →" }).first().click();
+  await page.getByRole("button", { name: "Review & sign payment" }).click();
+  await expect(page.getByRole("alert")).toContainText("Payment review changed");
+  expect(authorizations).toBe(0);
+  await expect(
+    page.getByRole("button", { name: "Resume payment signature" }),
+  ).toBeVisible();
+});
