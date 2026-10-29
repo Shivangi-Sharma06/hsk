@@ -2,7 +2,7 @@
 
 Retrieved 2026-10-29. English documentation collected for this project.
 
-Start with [project research notes](PROJECT-NOTES.md). [Source manifest](sources.json) records every page, source URL, SHA-256, aliases and retrieval failures.
+Start with [project research notes](PROJECT-NOTES.md). Current project design: [PRD](../prd.md), [architecture](../architecture.md), [execution plan](../implementation.md), [loophole review](planning/loopholes.md), [HSP integration](planning/hsp-integration.md), [UI](planning/ui.md), and [verification](planning/verification.md). [Source manifest](sources.json) records every page, source URL, SHA-256, aliases and retrieval failures.
 
 ## Reading order
 

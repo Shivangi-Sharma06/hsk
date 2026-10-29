@@ -1,295 +1,152 @@
-# ProofBid — Product Requirements Document (PRD)
+# ProofBid — Product Requirements Document
 
-**Track:** Agent Payments & A2A Settlement (HSP)
-**Chain:** HashKey Chain (HSK)
-**Settlement rail:** HashKey Settlement Protocol (HSP) Gateway — https://hashkey-merchant.github.io/#/
-**Version:** 1.0 (Hackathon MVP)
+Version 2.0 · 2026-10-30 · Testnet first
 
----
+## 1. Product and track
 
-## 1. Overview
+ProofBid lets a buyer's Payment Agent compare offers from receiving agents, verify their signed payment conditions, construct the corresponding HSP Payment Mandate, obtain the buyer's wallet signature, and settle through the existing HSP Gateway. A visible comparison explains exactly what the buyer will authorize. A proof bundle records what was offered, approved, paid and delivered.
 
-### 1.1 One-liner
-ProofBid is a decentralized B2B procurement protocol that cryptographically binds an RFQ, an EIP-712 signed vendor bid, and an HSP Payment Mandate, so no funds move unless all three match exactly.
+A2A means **Agent-to-Agent** here. Our initial HTTP message format is application-specific; we do not claim conformance with Google's A2A protocol until a standard adapter and its conformance tests exist.
 
-### 1.2 Problem
-Autonomous agents are moving to direct Account-to-Account (A2A) settlement. On-chain transfers are instant and irreversible, which creates three systemic risks:
+**Required journey:** buyer request → receiving agents' signed conditions → selected conditions → Payment Agent constructs mandate → wallet signs → HSP verifies and executes payment → independently checked settlement → receiving agent delivers.
 
-| Risk | Description |
-|---|---|
-| **Quote Drift** | Vendor wins an auction with a low quote, then submits a higher price when payment conditions are sent for mandate construction. |
-| **Mandate Tampering** | Destination account or delivery terms are altered between bidding and payment. |
-| **Invoice Fraud** | A compromised vendor agent presents a forged or modified invoice that the Payment Agent builds a mandate from. |
+**Current constraints:** no HSP sandbox or credentials available; no fixed deadline. Start on HashKey testnet. Mainnet is a separate release, not an environment variable toggle. Build a local simulator for development, clearly marked; a simulator or direct ERC-20 transfer does not satisfy real HSP integration.
 
-Existing protocols have **no cryptographic binding between the bidding phase and the HSP Payment Mandate**.
+## 2. Problem and product claims
 
-### 1.3 Solution
-A **Cryptographic 3-Way Match** enforced before any A2A transfer:
+Receiving agents can change payment conditions after selection. Software can confuse token units, payee addresses, quote expiry, chain IDs, retries or settlement status. ProofBid makes these mismatches explicit before signing, and reconciles uncertain submissions before permitting another payment.
 
-```
-RFQ  <->  EIP-712 Signed Vendor Bid  <->  HSP Payment Mandate
-                     |
-          bidHash committed on-chain (ProofBidRegistry.sol)
-```
+The protection applies to the ProofBid-controlled flow. An off-chain verifier cannot stop a buyer signing elsewhere, a compromised wallet, or a malicious gateway from violating its own contract. A signed quote proves authorization by its signer, not service quality or honesty. A payment signature is not proof of payment. Payment finality is not proof of delivery.
 
-Plus multi-variable bid scoring, vendor bonds with slashing, and an interactive attack-simulation mode for demos.
+Do not claim that other protocols lack quote binding, that delivery is guaranteed, that funds can be clawed back, or that a local check is enforced by the HSP Gateway.
 
----
+## 3. Concrete demo product
 
-## 2. Goals and Non-Goals
+The initial service is a **signed dataset quality report** for a small fixture dataset. Three receiving agent personas offer the same defined SKU, input digest, report schema and quantity at different prices. The honest service actually computes the report and returns a signed JSON artifact after verified payment.
 
-### 2.1 Goals
-- G1. Eliminate post-selection tampering of price, payee, token, SLA or expiry.
-- G2. Run the full procurement lifecycle (intent -> RFQ -> bids -> selection -> mandate -> settlement -> fulfilment) agent-to-agent.
-- G3. Use the **existing HSP Gateway** for settlement. We construct mandates; we do not replace the gateway.
-- G4. Make tampering **visibly fail** in a live demo (Attack Simulation Mode).
-- G5. Provide on-chain, auditable vendor reputation and bond accounting.
+The report contains row count, duplicate count, missing-field count, input digest, analyzer version and result digest. The buyer verifies the signature, schema, order/input binding and deterministic result. P0 sells one report per RFQ (`quantity=1`); the schema retains quantity for later batch service support. Fixtures are bounded, public and versioned; no arbitrary uploaded files or fetched URLs in P0. This provides real fulfilment without pretending to issue third-party LLM credits.
 
-### 2.2 Non-Goals (MVP)
-- Fiat on/off-ramps.
-- Multi-currency routing (USDC on HSK only).
-- Decentralized arbitration or DAO governance for disputes (MVP uses a designated arbiter address).
-- Partial or milestone payments (post-MVP).
-- Production-grade vendor KYC.
+Three personas may run within one vendor host, with separate identities, HTTP routes and keys. They demonstrate independent message/signature boundaries, not three independently operated businesses. Advertised delivery time is self-reported; historical performance is not invented.
 
----
+## 4. Scope and priorities
 
-## 3. Personas
+| Priority | Capability | Reason |
+| --- | --- | --- |
+| P0 | Structured request form, explicit budget, chain/token and buyer | Deterministic inputs |
+| P0 | HTTP RFQ exchange with three receiving agent personas | Real A2A boundary |
+| P0 | Signed immutable quote and separately transmitted matching conditions | Exposes post-selection drift |
+| P0 | Strict validation of buyer, SKU/input, payee, token, amount, chain and expiry | Prevents misdirected authorization |
+| P0 | Deterministic ranking with eligibility reasons | Clear vendor choice |
+| P0 | Buyer approval of exact prepared payment, wallet signature | Required track flow |
+| P0 | HSP Gateway adapter with recorded contract discovery | Existing rail, no replacement gateway |
+| P0 | Persisted payment state, idempotency, reconciliation and restart recovery | Avoids duplicate payments |
+| P0 | Spend cap, exact fee preview, fresh approval for changed terms | Bounded authority |
+| P0 | Settlement evidence checked before delivery | Prevents fake-paid delivery |
+| P0 | Real report delivery, verification, single fulfilment per purchase | Completes commerce |
+| P0 | Price/payee attack lab, real/local mode indicator, proof export | Distinctive demo |
+| P1 | Token/chain/SLA/replay attacks; saved request history | Extend tested paths |
+| P1 | Natural-language form assistance, validated and confirmed | Convenience only |
+| P1 | Locally measured delivery statistics and integer score breakdown | Useful ranking evidence |
+| P1 | Optional noncustodial on-chain commitment anchor | Public timestamp/auditability |
+| P2 | Third-party agent standard adapter, API service catalog | Interoperability |
+| P2 | Bonds, escrow, disputes and objective slashing | Separate economic design and audit |
 
-| Persona | Description | Needs |
-|---|---|---|
-| **Enterprise Buyer** | Human operator who states procurement intent in natural language. | Cheapest *safe* deal, spend limits, audit trail. |
-| **Buyer Payment Agent** | Autonomous agent that issues RFQs, scores bids, constructs and signs the mandate. | Verifiable inputs, deterministic matching. |
-| **Vendor (Receiving) Agent** | Agent that quotes and delivers resources (API credits, licences, compute). | Fair auction, guaranteed payment, simple signing flow. |
-| **Arbiter** (MVP) | Address authorised to confirm non-delivery and trigger slashing. | Evidence of settlement and delivery SLA. |
-| **Judge / Demo Viewer** | Hackathon evaluator. | Clear demonstration of the attack being blocked. |
+Bonds and slashing from v1 are deferred. A buyer's altered unsigned payload is not evidence of vendor misconduct. Conflicting signed messages can be legitimate revisions unless a precise irrevocability rule was accepted. Non-delivery also requires adjudication. No automatic punitive transfer or blacklist is in P0.
 
----
+## 5. Users and authority
 
-## 4. User Stories
+| Actor | Authority |
+| --- | --- |
+| Buyer | Owns RFQ and session; approves exact payment and signs in wallet |
+| Payment Agent | Validates, ranks, builds, checks and submits approved artifacts; never invents authority |
+| Receiving Agent | Signs an offer, transmits payment conditions, verifies settlement and delivers |
+| HSP Gateway / configured HSP deployment | Performs its documented authorization, execution and status duties |
+| Operator | Configures trusted vendors, gateway deployment and test scenarios; cannot silently authorize buyer funds |
 
-**Buyer**
-- US-1. As a buyer, I enter "Procure 50,000 LLM API credits, max 25 USDC, latency < 150ms" and the system parses it into a structured RFQ.
-- US-2. As a buyer, I see all bids ranked with score breakdown (price / reputation / latency).
-- US-3. As a buyer, I am guaranteed the paid amount and payee equal what the vendor signed.
-- US-4. As a buyer, I can approve the mandate with my wallet signature before settlement.
-- US-5. As a buyer, I get the delivered credentials automatically after settlement.
+Browser wallet keys stay in the wallet. Vendor test keys and merchant credentials stay server-side. The default flow has no backend buyer private key and no unattended payment. Development script wallets are testnet-only, explicitly selected, capped and separated from browser mode.
 
-**Vendor**
-- US-6. As a vendor, I register by staking a performance bond.
-- US-7. As a vendor, I receive RFQs and respond with an EIP-712 signed quote.
-- US-8. As a vendor, I am notified via HSP webhook when I'm paid and then release goods.
+## 6. Core product requirements
 
-**Security / Demo**
-- US-9. As a judge, I toggle "Attack Mode" and watch a vendor tamper with price/payee and see the registry reject, the mandate fail, and the bond slash.
+| ID | Requirement | Acceptance |
+| --- | --- | --- |
+| R01 | Form produces a confirmed RFQ with buyer, environment, SKU/input hash, quantity, budget and collection deadline | Invalid/incomplete input never starts bidding |
+| R02 | Payment Agent sends bounded RFQs concurrently to allowlisted receiving agents | One slow or failed vendor cannot block all bids |
+| R03 | Quotes use the canonical signed schema in architecture.md | Every material field is signed or bound by a checked hash |
+| R04 | Filter before ranking: verify signer, buyer/RFQ, currency, service, quantity, total, dates and vendor identity | Mutating one field invalidates eligibility |
+| R05 | Price is the primary ranking key, then promised delivery duration, then signer address | Identical valid inputs always rank identically |
+| R06 | Request selected receiving agent's payment conditions over HTTP | Conditions include original signed quote; any revision requires a new selection |
+| R07 | Compare received conditions with selected signed quote and approved policy | Mismatch stops before wallet signature or submission |
+| R08 | Prepare a versioned immutable payment draft using confirmed HSP wire schema | Unknown gateway fields/capabilities block real mode |
+| R09 | Preview recipient, token contract/network, exact recipient amount, total payer debit, fees and authorization expiry | Symbol alone or a USD label never determines token amount |
+| R10 | Sign precisely the approved draft; bind approval digest, wallet address, chain, expiry and policy version | Account/chain/draft changes invalidate approval |
+| R11 | Submit through the existing HSP Gateway using its documented payer flow | Real gateway identifiers and chain evidence saved |
+| R12 | Persist intent before network side effects; reconcile uncertain writes | Retry/restart/double click never blindly creates a second payment |
+| R13 | Validate gateway status and chain evidence against the approved attempt | Wrong transfer, fake callback and pending inclusion cannot unlock delivery |
+| R14 | Receiving agent verifies settlement itself before producing the artifact | Buyer-supplied `paid: true` is insufficient |
+| R15 | Deliver one signed result for the same quote/order; repeated retrieval is idempotent | Valid schema/input/order/signature/digest and computation verified |
+| R16 | Export a sanitized versioned evidence bundle and verification result | No secrets, raw reusable payment authorizations or paid report contents in public export |
+| R17 | Isolate demo attacks from real operator actions | Scenario chosen before run; no public production mutation endpoint |
+| R18 | Persist and stream an append-only event trail | Reconnecting UI catches up without repeating actions |
+| R19 | Explain uncertainty and failure with a next safe action | No spinner hides an ambiguous transfer |
+| R20 | Mainnet disabled by default with independent config and checklist | Testnet identifiers and keys cannot silently carry across |
 
----
+## 7. Canonical economic rules
 
-## 5. Functional Requirements
+One testnet chain and one exact token contract are enabled initially. Chain ID 133 and the testnet token in the merchant onboarding docs are discovery candidates, not proof that the organizer's deployment uses the same token. The chosen HSP deployment, RPC chain ID, token bytecode/decimals and supported execution protocol must agree before real mode starts.
 
-### 5.1 RFQ Management (FR-1x)
-| ID | Requirement | Priority |
-|---|---|---|
-| FR-1.1 | Parse natural-language intent into RFQ JSON: `rfqId, requiredSku, quantity, maxPrice, maxLatency, expiryTimestamp`. | P0 |
-| FR-1.2 | Generate unique `rfqId` (bytes32). | P0 |
-| FR-1.3 | Broadcast RFQ to registered vendors via HTTP and WebSocket. | P0 |
-| FR-1.4 | Reject bids received after `expiryTimestamp`. | P0 |
+Amounts are positive bounded decimal integer strings in token base units. Quantity is a positive bounded integer. No binary floating point, arbitrary currency conversion, partial payments, partial fulfilment, fee-on-transfer tokens or rebasing tokens in P0. Token decimals are read and compared with pinned configuration; a symbol never identifies an asset.
 
-### 5.2 Vendor Bidding (FR-2x)
-| ID | Requirement | Priority |
-|---|---|---|
-| FR-2.1 | Vendor agent evaluates inventory/capacity and decides eligibility. | P0 |
-| FR-2.2 | Vendor signs quote with EIP-712 (typed data below). | P0 |
-| FR-2.3 | Quote returned with signature (v, r, s) to the Buyer Payment Agent. | P0 |
-| FR-2.4 | Vendor must have an active bond in the registry to bid. | P0 |
+The quote fixes the exact recipient amount. Preparation must also fix the maximum total token debit and bounded gas/other fees, including who receives each fee. If the gateway's USD pricing/conversion cannot guarantee the quote's exact token conditions, block submission or obtain a new signed quote and buyer approval. Do not assume 1 USDC always equals exactly 1 USD. Start with zero additional token fees if the deployment supports it; never assume it does.
 
-**EIP-712 Quote struct (canonical):**
-```json
-{
-  "rfqId": "bytes32",
-  "vendorAddress": "address",
-  "tokenAddress": "address",
-  "unitPrice": "uint256",
-  "totalAmount": "uint256",
-  "slaHash": "bytes32",
-  "expiry": "uint256"
-}
-```
-Domain: `{ name: "ProofBid", version: "1", chainId: <HSK chainId>, verifyingContract: <ProofBidRegistry> }`
+Daily spend protection reserves approved maximum debits for pending/unknown payments atomically. Confirmed spent amounts remain in the daily total; only conclusively unspendable/revoked authorization releases an unresolved reservation. Native gas has a separate cap and gas-spent-on-failure accounting. Caps cannot protect the wallet from other apps.
 
-### 5.3 Verification and Scoring (FR-3x)
-| ID | Requirement | Priority |
-|---|---|---|
-| FR-3.1 | Recover signer from each signature and require it equals `vendorAddress`. | P0 |
-| FR-3.2 | Filter bids violating budget (`totalAmount > maxPrice`), SLA latency, expiry, or blacklist. | P0 |
-| FR-3.3 | Compute weighted score (see 5.3.1). | P0 |
-| FR-3.4 | Show full score breakdown in UI. | P1 |
+## 8. Workflow and time rules
 
-#### 5.3.1 Scoring formula
-```
-Score = 0.5 * PriceScore + 0.3 * ReputationScore + 0.2 * LatencyScore
-```
-All sub-scores normalised to [0, 1] where **higher is better**:
-- `PriceScore = (minPrice / vendorPrice)` across valid bids, or `1 - (p - min)/(max - min)`
-- `ReputationScore = reputation / 1000` (on-chain, capped)
-- `LatencyScore = 1 - (latency / maxLatency)` (clamped to [0, 1])
+1. User connects a wallet, confirms testnet, selects fixture/service and budget.
+2. RFQ collection window defaults to 5 seconds. Vendor request timeout is 2 seconds; allow one bounded safe retry within the window. Partial vendor failure is visible.
+3. Offers have a separate validity window: default 10 minutes, maximum 15 minutes. Collecting bids ends before quote validity. Allow at least 60 seconds for wallet interaction and gateway submission; re-quote otherwise.
+4. Validate and rank; user selects/accepts the recommended valid offer.
+5. Fetch receiving agent conditions, compare all bound fields, prepare payment and fee preview.
+6. Atomically reserve spend, freeze approval snapshot and collect wallet signature.
+7. Revalidate signature/snapshot, owner/account/chain, expiry, gateway target and current status, then submit the same attempt once.
+8. Observe, reconcile and independently validate the settlement evidence to the pinned finality policy.
+9. Receiving agent verifies the payment, generates and signs the report; buyer verifies and retrieves it.
+10. Show receipt and allow private evidence export.
 
-> The raw formula in the idea (`0.5 x Price`) only makes sense if each term is normalised so that lower price and lower latency yield higher scores. This normalisation is a design requirement. Ties are broken by lower price, then higher reputation.
+A rejected unpaid offer can be replaced with a new attempt only when no old spend authorization can still execute. A new vendor, fee, amount, mandate, expiry or nonce requires new explicit approval. After broadcast or an uncertain submission there is no automatic fallback. A timeout means unknown, not failed. Even a gateway rejection may leave a valid bearer signature executable until revocation/expiry is established.
 
-### 5.4 On-Chain Commitment (FR-4x)
-| ID | Requirement | Priority |
-|---|---|---|
-| FR-4.1 | Payment Agent computes `bidHash` (see 5.4.1). | P0 |
-| FR-4.2 | Call `commitWinningBid(rfqId, bidHash, vendorAddress, totalAmount)`. | P0 |
-| FR-4.3 | Contract stores commitment, rejects second commitment for same `rfqId`. | P0 |
-| FR-4.4 | Contract verifies the vendor is bonded and not blacklisted. | P0 |
+## 9. Failure and delivery semantics
 
-#### 5.4.1 Commitment hash
-Spec baseline:
-```
-bidHash = keccak256(abi.encodePacked(rfqId, vendorAddress, totalAmount, slaHash))
-```
-**Recommended hardening (MVP should adopt):** also bind `tokenAddress`, `expiry`, and `chainId`, and use `abi.encode` (not `encodePacked`) to avoid ambiguity:
-```
-bidHash = keccak256(abi.encode(rfqId, vendorAddress, tokenAddress, totalAmount, slaHash, expiry, chainId))
-```
-Without `tokenAddress`, a vendor could be paid in a different, cheaper token with the same numeric amount.
+- No valid bid: show reasons and allow an explicit new RFQ; never raise the budget automatically.
+- User rejects signing: stop, retaining request and evidence; no payment side effect.
+- Expired quote before authorization: re-quote. Expired quote after submission does not erase an actual payment; reconcile.
+- Unknown gateway acceptance or broadcast: freeze attempt and spend reservation; poll confirmed identifiers; do not choose another vendor.
+- Reverted/dropped/replaced transaction: reconcile authorization consumption, possible replacements and nonce before allowing a retry. A new on-chain nonce can spend twice if the original authorization remains valid.
+- Paid but undelivered: `DELIVERY_OVERDUE`, with signed terms and payment evidence; retry retrieval from the same order. No promise of refund or automatic compensation.
+- Invalid report: retain payment status, mark `DELIVERY_REJECTED`, expose evidence and retry/escalation path. Do not mark fulfilled merely from an HTTP 200 or a hash supplied by the same payload.
+- Reorg after an earlier inclusion: retract provisional settlement, suspend delivery and reconcile. An already delivered digital artifact cannot be undisclosed; use the conservative configured finality gate.
 
-### 5.5 HSP Mandate Construction (FR-5x)
-| ID | Requirement | Priority |
-|---|---|---|
-| FR-5.1 | Build HSP Payment Mandate **only from the signed quote fields** (never from free-form vendor messages). | P0 |
-| FR-5.2 | Embed `bidHash` in the mandate metadata/reference field. | P0 |
-| FR-5.3 | Buyer wallet signs the mandate. | P0 |
-| FR-5.4 | Pre-flight local check: mandate fields == signed quote == on-chain commitment. Abort on any mismatch. | P0 |
+## 10. UI and success criteria
 
-### 5.6 Settlement via HSP Gateway (FR-6x)
-| ID | Requirement | Priority |
-|---|---|---|
-| FR-6.1 | Submit signed mandate to the HSP Gateway. | P0 |
-| FR-6.2 | Verify mandate against `ProofBidRegistry` before/at execution (see Open Questions OQ-1 for integration mode). | P0 |
-| FR-6.3 | Gateway executes ERC-20 A2A transfer Buyer -> Vendor. | P0 |
-| FR-6.4 | Receive webhook with status `SETTLED — ACCEPT`; handle failure/rejection statuses. | P0 |
-| FR-6.5 | Record settlement on-chain (`markSettled`) for reputation and dispute window. | P1 |
+Use the one-page **Request → Compare → Approve → Receipt** workspace specified in [UI plan](docs/planning/ui.md). The central Conditions Match view compares the offer with the prepared authorization; display RFQ constraints as predicates, not a claim that all three hashes should be equal.
 
-### 5.7 Fulfilment (FR-7x)
-| ID | Requirement | Priority |
-|---|---|---|
-| FR-7.1 | Vendor agent listens for the settlement webhook (signature-verified). | P0 |
-| FR-7.2 | On confirmed settlement, release API keys/licences/compute to Buyer Agent. | P0 |
-| FR-7.3 | Delivery receipt hash recorded (optional on-chain) for SLA evidence. | P2 |
+Always show `Local simulator`, `Testnet · HSP Gateway`, or `Mainnet · HSP Gateway`, wallet/network and settlement state. A local event must not look like a real chain transaction.
 
-### 5.8 Bonds, Slashing, Reputation (FR-8x)
-| ID | Requirement | Priority |
-|---|---|---|
-| FR-8.1 | `registerVendor()` with minimum bond stake (USDC). | P0 |
-| FR-8.2 | Slash bond on proven bait-and-switch attempt or non-delivery. | P0 |
-| FR-8.3 | Blacklist slashed vendors. | P0 |
-| FR-8.4 | Reputation increments on successful delivery, decrements on failures. | P1 |
-| FR-8.5 | Slashed funds distribution: compensation to buyer first, remainder to treasury. | P1 |
-| FR-8.6 | Withdraw bond after cooldown with no open disputes. | P2 |
+MVP success means one real HSP testnet payment from receiving-agent conditions through buyer wallet signing, gateway execution, matched chain evidence and verified report delivery; price and payee drift stopped before signing; duplicate/unknown/restart tests pass; clean UI and private proof bundle work. Mock success is a development milestone only.
 
-### 5.9 Attack Simulation Mode (FR-9x)
-| ID | Requirement | Priority |
-|---|---|---|
-| FR-9.1 | UI toggle enables a "malicious vendor" persona. | P0 |
-| FR-9.2 | Attack scenarios: (a) price inflation, (b) payee swap, (c) SLA/terms change, (d) token swap, (e) replay of an old signed quote. | P0 (a, b), P1 (c-e) |
-| FR-9.3 | Show step-by-step failure trace: which check caught it, tx revert reason, slash event. | P0 |
-| FR-9.4 | Fallback: auto-select next-best valid bid and re-run the flow. | P1 |
+Application targets: normal non-network API operations p95 under 150 ms on the documented reference machine; bid results within 6 seconds at three vendors; UI acknowledgement within 200 ms with network operations asynchronous. These are measurements to validate, not benchmarks already achieved. Wallet confirmation, external gateway latency and chain finality are reported separately and have no invented 30-second guarantee.
 
----
+## 11. Mainnet and deferred work
 
-## 6. Non-Functional Requirements
+Mainnet needs organizer/API approval, dedicated merchant/vendor credentials and keys, independently verified chain/token/execution addresses, funded gas plan, low caps, stable HTTPS/webhook ingress, restore-tested persistence, dependency/security review and a small manually approved canary. No automatic testnet migration of rows, pending signatures, nonces or vendor identities.
 
-| Category | Requirement |
-|---|---|
-| **Security** | No private keys in browser/frontend code; EIP-712 domain separation; nonce/`rfqId` replay protection; signature malleability protection (use OpenZeppelin `ECDSA`); reentrancy guards on bond functions. |
-| **Performance** | RFQ -> ranked bids in < 10s (bid window configurable, default 8s). Commit tx + settlement < 30s on HSK testnet. |
-| **Reliability** | Idempotent webhook handler; retry with backoff on gateway calls; state machine persisted so a crash can resume. |
-| **Auditability** | Every state transition logged and tied to `rfqId`; on-chain events for commit, settle, slash. |
-| **Usability** | Single-page dashboard; one-click demo scenario. |
-| **Compatibility** | EVM-compatible HashKey Chain; ERC-20 (USDC) transfers; Solidity ^0.8.20. |
-| **Testing** | >= 90% line coverage on contract; end-to-end test script for happy path and each attack. |
+Optional additions follow the P1/P2 table after the real payment acceptance gate. Cross-chain CCIP, tokens beyond the chosen allowlist, escrow, autonomous spending, custom payment contracts and production KYC claims are outside P0.
 
----
+## 12. Document map
 
-## 7. System Components
-
-| Component | Responsibility | Tech (suggested) |
-|---|---|---|
-| Buyer Payment Agent | Intent parsing, RFQ, verification, scoring, commitment, mandate, signing | Node.js/TypeScript, ethers v6 |
-| Vendor Agent(s) | Quote and sign, listen for settlement, deliver | Node.js/TypeScript (3 instances: honest A, honest B, malicious C) |
-| ProofBidRegistry.sol | Commitments, bonds, slashing, reputation, verification | Solidity, Foundry/Hardhat, OpenZeppelin |
-| HSP Gateway (existing) | Mandate verification and A2A execution, webhook | External |
-| Dashboard | Intent input, bids, scores, 3-way match visual, attack toggle, event log | Next.js/React, wagmi/viem |
-| Message Bus | RFQ broadcast / bid return | Express + WebSocket (ws/socket.io) |
-| State Store | RFQ lifecycle state | SQLite / in-memory for MVP |
-
----
-
-## 8. Data Model (summary)
-
-**RFQ**: `rfqId, requiredSku, quantity, maxPrice, maxLatency, expiryTimestamp, status, buyerAddress`
-**SignedBid**: `quote{...}, v, r, s, receivedAt, score, valid, rejectReason`
-**Commitment (on-chain)**: `bidHash, vendor, totalAmount, committedAt, settled, buyer`
-**Vendor (on-chain)**: `bond, reputation, blacklisted, registeredAt`
-**Mandate**: HSP-defined structure + `metadata.ref = bidHash`
-
-State machine: `CREATED -> BIDDING -> EVALUATED -> COMMITTED -> MANDATE_SIGNED -> SUBMITTED -> SETTLED -> FULFILLED`
-Failure branches: `REJECTED (tamper) -> SLASHED -> FALLBACK`, `EXPIRED`, `FAILED`.
-
----
-
-## 9. Security and Threat Model
-
-| # | Threat | Mitigation |
-|---|---|---|
-| T1 | Price inflation after win | Mandate built from signed quote; `totalAmount` in `bidHash`; registry rejects mismatch. |
-| T2 | Payee swap | `vendorAddress` in signed quote and `bidHash`; mandate payee must equal committed vendor. |
-| T3 | Token swap | `tokenAddress` bound in quote and `bidHash`. |
-| T4 | SLA/terms change | `slaHash` bound in quote and `bidHash`. |
-| T5 | Quote replay across RFQs | `rfqId` in signed struct; one commitment per `rfqId`; `expiry` enforced. |
-| T6 | Cross-chain/contract replay | EIP-712 domain with `chainId` + `verifyingContract`. |
-| T7 | Malicious buyer agent (low-balls registry) | Buyer wallet signature required; spend limits and policy check before signing. |
-| T8 | Vendor non-delivery after payment | Bond slash via arbiter after SLA timeout. |
-| T9 | Fake webhook triggers delivery | Verify HSP webhook signature; cross-check on-chain settlement. |
-| T10 | Front-running the commit | Commit is by the buyer's registered agent address only. |
-| T11 | Griefing: bidders spamming RFQs | Bond requirement to bid; per-vendor rate limit. |
-
----
-
-## 10. Success Metrics (Hackathon)
-
-- Happy path completes end-to-end on HSK testnet with a real HSP-settled transfer.
-- 100% of simulated tamper attempts (price, payee, token, SLA) are rejected.
-- Slash event and blacklist visible on-chain and in UI.
-- Demo runs in under 3 minutes without manual intervention.
-- Clear judge-visible 3-way match panel (RFQ / Bid / Mandate hashes aligned or red-flagged).
-
----
-
-## 11. Assumptions and Open Questions
-
-**Assumptions**
-- A1. HSP Gateway exposes endpoints to create/submit signed Payment Mandates and to receive settlement webhooks (confirm exact schema from the gateway docs).
-- A2. The mandate has a metadata/reference field that can carry a 32-byte hash.
-- A3. USDC (or a test ERC-20) is deployed/available on HSK testnet.
-
-**Open Questions**
-- **OQ-1 (critical): How does the HSP Gateway "check against ProofBidRegistry"?** The gateway is existing infrastructure. Options:
-  1. *Native hook:* gateway supports a pre-execution verification callback (best if available).
-  2. *ProofBid Verifier Service (fallback):* a ProofBid-operated service that sits between agent and gateway, reads the registry, and only forwards mandates that match; gateway receives only verified mandates.
-  3. *Registry-as-spender:* the buyer approves the registry; the registry performs `transferFrom` after validation (bypasses HSP, so least preferred for the track).
-  The MVP should implement Option 2 behind an interface so it can be swapped for Option 1 if the gateway supports it.
-- **OQ-2:** Who triggers `slashVendor`? MVP: arbiter address; stretch: automated via missing-delivery timeout.
-- **OQ-3:** Exact HSP mandate field mapping (payee, amount, token, reference, expiry, nonce).
-- **OQ-4:** Minimum bond size and slash split.
-
----
-
-## 12. Out of Scope / Future Work
-- Milestone/escrow-style partial payments.
-- Decentralized arbitration (Kleros-style) and zk-proof of delivery.
-- Reputation oracle across multiple chains.
-- Multi-token and cross-chain procurement.
-- SDK for third-party vendor agents.
+- [Architecture](architecture.md): schemas, backend, persistence, state, endpoints and trust boundaries.
+- [Execution plan](implementation.md): ordered tasks, dependencies, acceptance and deployment.
+- [Loophole review](docs/planning/loopholes.md): original gaps and how each is resolved.
+- [HSP integration gate](docs/planning/hsp-integration.md): known interfaces, unresolved fields and required evidence.
+- [Verification matrix](docs/planning/verification.md): adversarial and recovery cases.
+- [UI plan](docs/planning/ui.md): layout, content and interaction behavior.
