@@ -28,7 +28,9 @@
     "contracts:check": "forge fmt --root contracts --check",
     "contracts:prepare": "tsx scripts/anchor.ts prepare",
     "contracts:deploy": "tsx scripts/anchor.ts deploy",
-    "contracts:verify": "tsx scripts/anchor.ts check"
+    "contracts:verify": "tsx scripts/anchor.ts check",
+    "audit:prepare": "tsx scripts/audit.ts prepare",
+    "audit:verify": "tsx scripts/audit.ts check"
   },
   "dependencies": {
     "@fastify/cookie": "^11.1.5",

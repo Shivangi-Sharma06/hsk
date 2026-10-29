@@ -1,3 +1,4 @@
+import { verifyAnchorReceipt } from "../scripts/lib/anchor-receipt.js";
 import { spawn, type ChildProcess } from "node:child_process";
 import { createServer } from "node:net";
 import { once } from "node:events";
@@ -118,6 +119,35 @@ it("deploys exact compiled code, anchors buyer commitments and rejects overwrite
   const anchored = await wallet.writeContract(request);
   const receipt = await client.waitForTransactionReceipt({ hash: anchored });
   expect((await client.getTransaction({ hash: anchored })).input).toBe(data);
+  expect(
+    await verifyAnchorReceipt(client, manifest, record, anchored, 1),
+  ).toMatchObject({
+    auditCommitmentVerified: true,
+    paymentVerified: false,
+    hspExecutionVerified: false,
+  });
+  await expect(
+    verifyAnchorReceipt(client, manifest, record, anchored, 5),
+  ).rejects.toThrow(/confirmations/);
+  await expect(
+    verifyAnchorReceipt(
+      client,
+      { ...manifest, runtimeCodeHash: record.rfqId },
+      record,
+      anchored,
+      1,
+    ),
+  ).rejects.toThrow(/code/);
+  await expect(
+    verifyAnchorReceipt(
+      client,
+      manifest,
+      { ...record, approvalDigest: record.rfqId },
+      anchored,
+      1,
+    ),
+  ).rejects.toThrow(/commitment/);
+
   expect(
     parseEventLogs({
       abi: anchorAbi,
