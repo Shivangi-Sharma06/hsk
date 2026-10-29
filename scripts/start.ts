@@ -1,3 +1,3 @@
-await import('../apps/api/src/server.js');
+await import("../apps/api/src/server.js");
 
 export {};
