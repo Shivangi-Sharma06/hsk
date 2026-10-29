@@ -21,7 +21,11 @@
     "smoke": "tsx scripts/smoke.ts",
     "db:migrate": "tsx scripts/db.ts migrate",
     "db:backup": "tsx scripts/db.ts backup",
-    "verify:bundle": "tsx scripts/verify-bundle.ts"
+    "verify:bundle": "tsx scripts/verify-bundle.ts",
+    "contracts:build": "forge build --root contracts",
+    "contracts:test": "forge test --root contracts",
+    "contracts:coverage": "forge coverage --root contracts",
+    "contracts:check": "forge fmt --root contracts --check"
   },
   "dependencies": {
     "@fastify/cookie": "^11.1.5",
@@ -34,6 +38,8 @@
   },
   "devDependencies": {
     "@eslint/js": "^10.0.1",
+    "@foundry-rs/anvil": "1.7.1",
+    "@foundry-rs/forge": "1.7.1",
     "@playwright/test": "^1.64.1",
     "@types/node": "^22.20.5",
     "eslint": "^10.13.0",
