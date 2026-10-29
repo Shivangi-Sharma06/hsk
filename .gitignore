@@ -42,3 +42,11 @@ keystore/
 .DS_Store
 Thumbs.db
 .claude/settings.local.json
+
+# Runtime data and test output
+/data/
+*.sqlite
+*.sqlite-wal
+*.sqlite-shm
+test-results/
+playwright-report/

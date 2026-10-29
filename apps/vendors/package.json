@@ -1,0 +1,1 @@
+{"name":"@proofbid/vendors","private":true,"type":"module","dependencies":{"@proofbid/domain":"workspace:*"}}
