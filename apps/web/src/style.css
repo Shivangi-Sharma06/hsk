@@ -1,20 +1,35 @@
+@font-face {
+  font-family: "DM Sans";
+  font-style: normal;
+  font-weight: 400 700;
+  font-display: swap;
+  src: url("/fonts/dm-sans-latin.woff2") format("woff2");
+}
+@font-face {
+  font-family: "Fraunces";
+  font-style: normal;
+  font-weight: 400 600;
+  font-display: swap;
+  src: url("/fonts/fraunces-latin.woff2") format("woff2");
+}
 :root {
   color-scheme: dark;
   font-family:
-    Inter,
+    "DM Sans",
     -apple-system,
     BlinkMacSystemFont,
     "Segoe UI",
     sans-serif;
-  color: #eeedf3;
+  color: #f2ece8;
   background: #111016;
   font-synthesis: none;
+  font-optical-sizing: auto;
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   --surface: #17161f;
   --inset: #100f17;
   --raised: #1d1b28;
-  --muted: #aba7b9;
+  --muted: #b8afb9;
   --border: #302d3c;
   --purple: #c4a7ef;
   --primary: #63468b;
@@ -87,9 +102,12 @@ h3,
 p {
   margin-top: 0;
 }
-h2,
+h2 {
+  font-family: "Fraunces", Georgia, serif;
+  font-weight: 450;
+}
 h3 {
-  font-weight: 550;
+  font-weight: 600;
 }
 h3 {
   font-size: 15px;
@@ -123,9 +141,33 @@ details[open] > summary::after {
   content: " −";
 }
 .workspace {
-  max-width: 1200px;
+  max-width: 1280px;
   margin: auto;
-  padding: 0 32px;
+  padding: 0 56px;
+  position: relative;
+  isolation: isolate;
+}
+/* The illustration frames the app; payment data stays on opaque surfaces. */
+.workspace::before {
+  content: "";
+  position: fixed;
+  inset: 86px max(24px, calc((100vw - 1680px) / 2)) 18px;
+  z-index: -1;
+  pointer-events: none;
+  border: 1px solid #55505c;
+  border-radius: 18px;
+  background:
+    linear-gradient(#13101a24, #13101a42),
+    url("/images/cozy-night.webp") center / cover;
+}
+.app-console {
+  padding: 0 24px 28px;
+  border: 1px solid #49404f;
+  border-radius: 10px;
+  background-color: #111016;
+  background-image: radial-gradient(#3a304344 0.7px, transparent 0.7px);
+  background-size: 20px 20px;
+  box-shadow: 0 18px 60px #0005;
 }
 .header {
   display: flex;
@@ -206,7 +248,7 @@ details[open] > summary::after {
 }
 .outline {
   border: 1px solid #413b50;
-  background: #15131d;
+  background: #17141e;
   padding: 12px 18px;
   border-radius: 6px;
   font-weight: 500;
@@ -234,7 +276,7 @@ details[open] > summary::after {
   align-items: center;
   color: var(--muted);
   font-size: 11px;
-  padding-top: 18px;
+  padding: 22px 0 0;
   line-height: 1.6;
 }
 .notice span {
@@ -264,19 +306,19 @@ details[open] > summary::after {
   letter-spacing: 2px;
 }
 .intro h1 {
-  font-family: Georgia, "Times New Roman", serif;
-  font-size: clamp(42px, 5.6vw, 66px);
+  font-family: "Fraunces", Georgia, serif;
+  font-size: clamp(44px, 5.5vw, 68px);
   font-weight: 400;
   line-height: 1.06;
-  letter-spacing: -2.4px;
+  letter-spacing: -2px;
   margin: 20px 0;
 }
 .intro h1 span {
-  color: #c0b9cf;
+  color: #ecd2c8;
 }
 .intro p {
-  font-size: 15px;
-  color: var(--muted);
+  font-size: 16px;
+  color: #d6ccd5;
   line-height: 1.75;
   margin-bottom: 0;
 }
@@ -315,15 +357,16 @@ details[open] > summary::after {
   display: flex;
   align-items: center;
   gap: 32px;
-  border: 1px solid var(--border);
-  background: var(--surface);
-  border-radius: 8px;
-  padding: 16px 22px;
-  margin-bottom: 24px;
+  border: 0;
+  border-bottom: 1px solid var(--border);
+  background: #17141e;
+  border-radius: 10px 10px 0 0;
+  padding: 18px 24px;
+  margin: 0 -24px 28px;
   font-size: 12px;
   color: var(--muted);
 }
-.has-run .steps {
+.has-run .app-console {
   margin-top: 28px;
 }
 .steps > div {
@@ -386,7 +429,7 @@ details[open] > summary::after {
   margin-bottom: 25px;
 }
 .section-title h2 {
-  font-size: 23px;
+  font-size: 28px;
   margin: 8px 0 0;
   letter-spacing: -0.6px;
 }
@@ -485,12 +528,10 @@ select:hover {
   max-width: 740px;
   margin: 30px auto 48px;
   padding: 36px;
-  background-color: #15131d;
-  background-image: radial-gradient(#393043 0.65px, transparent 0.65px);
-  background-size: 20px 20px;
+  background: #19161f;
 }
 .welcome h2 {
-  font-size: 26px;
+  font-size: 30px;
   letter-spacing: -0.8px;
   margin: 22px 0 14px;
 }
@@ -536,7 +577,8 @@ select:hover {
   gap: 20px;
 }
 .run-heading h1 {
-  font-size: 25px;
+  font-family: "Fraunces", Georgia, serif;
+  font-size: 30px;
   font-weight: 550;
   letter-spacing: -0.8px;
   margin: 10px 0;
@@ -705,12 +747,13 @@ select:hover {
   margin: 0 16px;
 }
 .match-row {
+  line-height: 1.6;
   display: grid;
   grid-template-columns: 125px 1fr 12px;
   gap: 8px;
   padding: 14px 0;
   border-bottom: 1px solid var(--border);
-  font-size: 11px;
+  font-size: 12px;
 }
 .match-row > span {
   color: var(--muted);
@@ -982,7 +1025,8 @@ footer {
   justify-content: space-between;
   gap: 20px;
   padding: 28px 0;
-  margin-top: 36px;
+  margin-top: 26px;
+  text-shadow: 0 1px 4px #000;
   border-top: 1px solid var(--border);
   font-size: 10px;
   color: var(--muted);
@@ -1001,6 +1045,16 @@ footer > span > span {
   }
 }
 @media (max-width: 800px) {
+  .workspace::before {
+    inset: 86px 8px 10px;
+    border-radius: 12px;
+  }
+  .app-console {
+    padding: 0 20px 24px;
+  }
+  .steps {
+    margin: 0 -20px 24px;
+  }
   .workspace {
     padding: 0 20px;
   }
@@ -1035,6 +1089,18 @@ footer > span > span {
   }
 }
 @media (max-width: 480px) {
+  .workspace::before {
+    inset: 74px 6px 6px;
+  }
+  .app-console {
+    padding: 0 12px 16px;
+  }
+  .steps {
+    margin: 0 -12px 20px;
+  }
+  .has-run .app-console {
+    margin-top: 22px;
+  }
   .workspace {
     padding: 0 16px;
   }
@@ -1071,7 +1137,7 @@ footer > span > span {
     padding: 44px 0 32px;
   }
   .intro h1 {
-    font-size: 46px;
+    font-size: 43px;
     letter-spacing: -1.8px;
   }
   .intro p {
@@ -1121,7 +1187,7 @@ footer > span > span {
     padding: 20px;
   }
   .welcome {
-    padding: 26px 22px;
+    padding: 26px 20px;
     margin: 0 auto 36px;
   }
   .welcome h2 {
@@ -1183,7 +1249,7 @@ footer > span > span {
     font-size: 7px;
   }
   .match-row {
-    grid-template-columns: 100px 1fr 12px;
+    grid-template-columns: 86px 1fr 12px;
     font-size: 11px;
   }
   .receipt-copy h2 {
