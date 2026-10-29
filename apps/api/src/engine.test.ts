@@ -335,6 +335,75 @@ describe("durable A2A payment orchestration", () => {
       vi.useRealTimers();
     }
   });
+  it("rejects another wallet signature without dispatching or releasing the reservation", async () => {
+    const id = await create();
+    const run = await select(id);
+    const approval = engine.approve(
+      buyer.address,
+      id,
+      run.approvalDigest!,
+      run.version,
+      crypto.randomUUID(),
+    );
+    const signature = await stranger.signTypedData(
+      paymentPayload(approval.prepared),
+    );
+    await expect(
+      engine.authorize(
+        buyer.address,
+        id,
+        run.approvalDigest!,
+        signature,
+        approval.version,
+        crypto.randomUUID(),
+      ),
+    ).rejects.toThrow(/Invalid payment signature/);
+    expect(engine.run(id, buyer.address).state).toBe(
+      "RESERVED_AWAITING_SIGNATURE",
+    );
+    expect(engine.store.list("spend")).toHaveLength(1);
+    expect(vendor.store.list("payment")).toHaveLength(0);
+  });
+  it("recovers overdue delivery without losing settlement or creating another payment", async () => {
+    const id = await create("slow-delivery");
+    await authorize(await select(id));
+    await engine.workOnce();
+    await engine.workOnce();
+    const run = engine.run(id, buyer.address);
+    expect(run.state).toBe("DELIVERY_PENDING");
+    const deadline =
+      run.settlement!.settledAt +
+      run.selectedQuote!.terms.deliveryWithinSeconds;
+    vi.useFakeTimers({ toFake: ["Date"] });
+    try {
+      vi.setSystemTime((deadline + 1) * 1000);
+      await expect(
+        engine.deliver(engine.run(id, buyer.address)),
+      ).rejects.toThrow(/delayed/);
+      expect(engine.run(id, buyer.address).state).toBe("DELIVERY_OVERDUE");
+      expect(engine.run(id, buyer.address).settlement).toEqual(run.settlement);
+      vi.setSystemTime((deadline + 3) * 1000);
+      await engine.deliver(engine.run(id, buyer.address));
+      expect(engine.run(id, buyer.address).state).toBe("FULFILLED");
+      expect(vendor.store.list("payment")).toHaveLength(1);
+    } finally {
+      vi.useRealTimers();
+    }
+  });
+  it("returns no valid offers when every receiving agent is unavailable", async () => {
+    const spy = vi
+      .spyOn(engine, "peer")
+      .mockRejectedValue(new Error("Receiving agent unavailable"));
+    try {
+      const { id } = engine.create(buyer.address, input, crypto.randomUUID());
+      await engine.workOnce();
+      expect(engine.run(id, buyer.address).state).toBe("NO_VALID_QUOTES");
+      expect(engine.run(id, buyer.address).quotes).toHaveLength(3);
+      expect(engine.store.list("spend")).toHaveLength(0);
+    } finally {
+      spy.mockRestore();
+    }
+  });
   it("requires an original fresh sign-in challenge and hides payer signatures in proof", async () => {
     const app = createApp({ engine, startWorker: false });
     const headers = { origin: engine.config.origin };
