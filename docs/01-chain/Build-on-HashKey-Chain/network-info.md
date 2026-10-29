@@ -1,0 +1,35 @@
+<!-- Source: https://docs.hskchain.net/docs/Build-on-HashKey-Chain/network-info | Retrieved: 2026-10-29 | Language: English -->
+
+# 
+
+# Network Infos
+
+This reference guide provides a listing of HashKey networks information.
+
+### Connectting to Mainnet
+
+| **Name** | **Value** |
+| --- | --- |
+| Network Name | HSKChain |
+| RPC Endpiont | <https://mainnet.hsk.xyz> |
+| ChainID | 177 |
+| Native Token | HSK |
+| Explorer | <https://hashkey.blockscout.com> |
+
+### Connectting to Testnet
+
+| **Name** | **Value** |
+| --- | --- |
+| Network Name | HSKChain Testnet |
+| RPC Endpiont | <https://testnet.hsk.xyz> |
+| ChainID | 133 |
+| Native Token | HSK |
+| Explorer | <https://testnet-explorer.hsk.xyz> |
+
+### Acquiring testnet HSK
+
+To start building on HSKChain Testnet, you'll first need some test HSK. See the [Faucets](Tools/Faucet.md) to get test HSK on HSKChain Testnet.
+
+[PreviousJovian Network Upgrade](../Notices/Jovian-Upgrade.md)
+
+[NextToken Contracts](Token-Contracts.md)

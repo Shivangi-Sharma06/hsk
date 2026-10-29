@@ -1,0 +1,148 @@
+<!-- Source: https://docs.hskchain.net/docs/Knowledge/erc20 | Retrieved: 2026-10-29 | Language: English -->
+
+# 
+
+# ERC-20 Token Standard
+
+The ERC-20 token standard is a technical specification for fungible tokens created on the Ethereum blockchain. Introduced in November 2015 by Fabian Vogelsteller through [EIP-20](https://eips.ethereum.org/EIPS/eip-20), it has become the most widely adopted token standard in the blockchain ecosystem, enabling interoperability between different applications and exchanges.
+
+## Core Functions and Events
+
+The ERC-20 standard defines a common interface that all compliant tokens must implement:
+
+### Required Functions
+
+```solidity
+function totalSupply() public view returns (uint256)
+function balanceOf(address account) public view returns (uint256)
+function transfer(address recipient, uint256 amount) public returns (bool)
+function allowance(address owner, address spender) public view returns (uint256)
+function approve(address spender, uint256 amount) public returns (bool)
+function transferFrom(address sender, address recipient, uint256 amount) public returns (bool)
+```
+
+### Required Events
+
+```solidity
+event Transfer(address indexed from, address indexed to, uint256 value)
+event Approval(address indexed owner, address indexed spender, uint256 value)
+```
+
+### Optional Metadata Functions
+
+```solidity
+function name() public view returns (string)
+function symbol() public view returns (string)
+function decimals() public view returns (uint8)
+```
+
+## How ERC-20 Tokens Work
+
+### Token Ownership and Balances
+
+* Each token holder's balance is tracked in a mapping of addresses to amounts
+* The sum of all balances equals the total supply
+* Tokens are transferred between addresses using the `transfer` and `transferFrom` functions
+
+### Delegation Model
+
+ERC-20 implements a delegation model allowing third parties to transfer tokens on a user's behalf:
+
+1. The token owner approves a spender address to spend a specific amount with `approve()`
+2. The approval is recorded in an allowance mapping
+3. The approved spender can transfer tokens from the owner's address using `transferFrom()`
+4. Each transfer reduces the allowance until it reaches zero
+
+## Technical Implementation
+
+A basic ERC-20 token implementation in Solidity looks like this:
+
+```solidity
+contract ERC20Token {
+    string public name;
+    string public symbol;
+    uint8 public decimals;
+    uint256 public totalSupply;
+    
+    mapping(address => uint256) private _balances;
+    mapping(address => mapping(address => uint256)) private _allowances;
+    
+    constructor(string memory _name, string memory _symbol, uint8 _decimals, uint256 _initialSupply) {
+        name = _name;
+        symbol = _symbol;
+        decimals = _decimals;
+        totalSupply = _initialSupply;
+        _balances[msg.sender] = _initialSupply;
+    }
+    
+    function balanceOf(address account) public view returns (uint256) {
+        return _balances[account];
+    }
+    
+    function transfer(address recipient, uint256 amount) public returns (bool) {
+        require(_balances[msg.sender] >= amount, "Insufficient balance");
+        
+        _balances[msg.sender] -= amount;
+        _balances[recipient] += amount;
+        
+        emit Transfer(msg.sender, recipient, amount);
+        return true;
+    }
+    
+    // Additional functions for approve, transferFrom, allowance, etc.
+}
+```
+
+## Common Extensions and Improvements
+
+Several extensions to the ERC-20 standard address various limitations:
+
+* **ERC-223**: Prevents tokens from being lost when sent to contracts not designed to handle them
+* **ERC-777**: Adds hooks allowing contracts to react to token transfers while remaining compatible with ERC-20
+* **ERC-1363**: Enables callback functions after token transfers or approvals
+* **ERC-2612**: Adds permit function for gasless approvals using off-chain signatures
+* **ERC-4626**: Standard for tokenized vaults, building on ERC-20 for yield-bearing tokens
+
+## Applications in DeFi
+
+ERC-20 tokens serve as foundational building blocks for decentralized finance:
+
+* **Stablecoins**: Tokens pegged to external assets (USDC, DAI, USDT)
+* **Governance Tokens**: Voting rights in decentralized protocols (UNI, COMP, AAVE)
+* **Utility Tokens**: Used to access protocol services or pay fees (LINK, GRT)
+* **Wrapped Assets**: Tokenized versions of assets from other blockchains (WBTC, WETH)
+* **Liquidity Pool Tokens**: Representing ownership of assets in decentralized exchanges
+
+## Limitations and Challenges
+
+Despite its widespread adoption, ERC-20 has several known limitations:
+
+* **Lost Tokens**: Tokens sent to contracts not implementing token retrieval functions may be permanently lost
+* **Approval Frontrunning**: Vulnerable to frontrunning attacks when changing allowances
+* **Limited Metadata**: No standard mechanism for rich metadata or associated resources
+* **Inefficient Approvals**: Requires two transactions for delegated transfers (approve and transferFrom)
+* **Gas Costs**: Transfer costs remain significant during periods of network congestion
+
+## Security Considerations
+
+Common security issues with ERC-20 implementations include:
+
+* **Integer Overflow/Underflow**: Without proper checks, arithmetic operations can wrap around
+* **Reentrancy Vulnerabilities**: External calls during transfers can lead to reentrancy attacks
+* **Frontrunning**: Transaction ordering manipulation can be exploited by miners/validators
+* **Double-Entry Point Attacks**: Multiple functions affecting the same state can lead to inconsistencies
+* **Fee-on-Transfer Tokens**: Non-standard implementations that take fees can break composability
+
+## Impact and Significance
+
+The ERC-20 standard has had a profound impact on the blockchain ecosystem:
+
+* Enabled the 2017-2018 ICO boom and subsequent token economy
+* Created a foundation for interoperable financial applications
+* Established patterns for cross-platform token support
+* Enabled standardized exchange listings and wallet integrations
+* Inspired token standards on other blockchains (BEP-20, TRC-20)
+
+The ERC-20 standard remains the most widely used token interface in the Ethereum ecosystem, with thousands of tokens deployed and trillions of dollars in cumulative transaction volume.
+
+[NextAbout HSKChain](../About-HashKey-Chain.md)

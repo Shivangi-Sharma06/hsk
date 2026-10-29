@@ -1,0 +1,117 @@
+<!-- Source: https://hashfans.io/docs/Knowledge/dao | Retrieved: 2026-10-29 | Language: English -->
+
+# Decentralized Autonomous Organizations (DAOs)
+
+A Decentralized Autonomous Organization (DAO) is a blockchain-based entity governed by its members rather than a central authority. DAOs use smart contracts to establish rules, execute decisions, and manage resources collectively and transparently.
+
+## Core Characteristics
+
+- **Decentralized Governance**: Decision-making distributed among members
+- **Transparency**: Rules and transactions visible on the blockchain
+- **Autonomy**: Operations executed through smart contracts without intermediaries
+- **Community-Owned**: Members hold governance tokens proportional to their stake
+- **Permissionless**: Anyone can participate based on predefined rules
+
+## DAO Structure and Components
+
+### Governance Mechanisms
+
+DAOs typically use one or more of these governance models:
+
+- **Token-Based Voting**: Decisions weighted by token holdings
+- **Quadratic Voting**: Voting power increases as the square root of tokens, reducing plutocracy
+- **Conviction Voting**: Vote weight increases with time, favoring patient stakeholders
+- **Holacracy**: Distributed authority through defined roles and circles
+- **Futarchy**: Decision-making based on prediction markets
+
+### Treasury Management
+
+DAOs manage shared resources through:
+
+- **Multi-signature Wallets**: Requiring multiple approvals for transactions
+- **Escrow Contracts**: Holding funds until conditions are met
+- **Grant Systems**: Distributing funds for approved projects
+- **Investment Frameworks**: Guidelines for capital allocation
+
+### Membership Types
+
+DAOs can implement various membership structures:
+
+- **Token-Based**: Access proportional to token holdings
+- **Share-Based**: Membership through non-transferable shares
+- **Reputation-Based**: Influence based on contributions
+- **Role-Based**: Rights determined by assigned responsibilities
+- **Hybrid Models**: Combinations of the above approaches
+
+## Types of DAOs
+
+### Protocol DAOs
+
+Govern blockchain protocols and DeFi applications:
+- **Examples**: MakerDAO, Uniswap, Compound
+- **Purpose**: Parameter adjustment, treasury management, protocol upgrades
+
+### Investment DAOs
+
+Pool capital for collective investments:
+- **Examples**: MetaCartel Ventures, The LAO
+- **Purpose**: Fund allocation, investment decisions, portfolio management
+
+### Service DAOs
+
+Provide services to clients as decentralized organizations:
+- **Examples**: DAOhaus, dOrg, RaidGuild
+- **Purpose**: Client acquisition, project management, compensation distribution
+
+### Social DAOs
+
+Form communities around shared interests:
+- **Examples**: Friends With Benefits, Bankless DAO
+- **Purpose**: Community building, content creation, coordination
+
+### Collector DAOs
+
+Collectively acquire and manage valuable assets:
+- **Examples**: PleasrDAO, FlamingoDAO
+- **Purpose**: Asset acquisition, curation, fractionalization
+
+## Legal and Regulatory Considerations
+
+DAOs face several legal challenges:
+
+- **Legal Recognition**: Limited formal recognition in most jurisdictions
+- **Liability**: Unclear liability distribution among members
+- **Compliance**: Regulatory requirements across different geographies
+- **Legal Wrappers**: Foundation, LLC, or cooperative structures to interface with legal systems
+
+## Technical Implementation
+
+DAO frameworks and tools include:
+
+- **Aragon**: Modular infrastructure for creating and managing DAOs
+- **DAOhaus**: Platform focused on Moloch DAO framework
+- **Colony**: Complex organizational structures with reputation systems
+- **Snapshot**: Off-chain voting system to reduce gas costs
+- **Tally**: Governance dashboard for tracking proposals and votes
+
+## Challenges and Limitations
+
+Despite their potential, DAOs face significant challenges:
+
+- **Scalability**: Difficulty coordinating large groups efficiently
+- **Voter Apathy**: Low participation rates in governance
+- **Technical Complexity**: Steep learning curve for non-technical members
+- **Security Vulnerabilities**: Smart contract risks (as seen in "The DAO" hack of 2016)
+- **Governance Attacks**: Potential for takeovers through token acquisition or manipulation
+
+## Evolution and Future Directions
+
+DAOs continue to evolve with innovations in:
+
+- **Sub-DAOs**: Specialized working groups within larger organizations
+- **Cross-Chain Governance**: Operating across multiple blockchains
+- **Reputation Systems**: Non-transferable influence based on contributions
+- **Governance Minimization**: Reducing governance attack surfaces through automation
+- **Real-World Integration**: Connecting on-chain governance with off-chain actions
+
+DAOs represent a fundamental reimagining of organizational structures, enabling more fluid, transparent, and participatory coordination than traditional hierarchical organizations.

@@ -1,0 +1,44 @@
+# Dependencies
+node_modules/
+.pnp.*
+
+# Build output and caches
+dist/
+build/
+.next/
+out/
+.turbo/
+*.tsbuildinfo
+coverage/
+.nyc_output/
+.vercel/
+
+# Solidity / Foundry / Hardhat generated files
+cache/
+artifacts/
+typechain-types/
+broadcast/**/dry-run/
+
+# Environment and private keys
+.env
+.env.*
+!.env.example
+!.env.*.example
+*.pem
+*.key
+keystore/
+
+# Logs and temporary files
+*.log
+*.pid
+*.tmp
+*.swp
+*.swo
+*~
+
+# Local editor, OS and agent settings
+.idea/
+.vscode/
+.DS_Store
+Thumbs.db
+.claude/settings.local.json

@@ -1,0 +1,55 @@
+<!-- Source: https://docs.hskchain.net/docs/Knowledge/smart-contracts | Retrieved: 2026-10-29 | Language: English -->
+
+# 
+
+# Smart Contracts
+
+Smart contracts are self-executing digital agreements with the terms of the agreement directly written into code. They automatically enforce and execute the terms when predetermined conditions are met, without requiring intermediaries.
+
+## Key Characteristics
+
+* **Self-executing**: Automatically run when conditions are met
+* **Immutable**: Once deployed, the code cannot be changed (unless specifically designed to be upgradable)
+* **Transparent**: The code is visible to all participants on the blockchain
+* **Trustless**: No need to trust counterparties as execution is guaranteed by code
+* **Deterministic**: The same input always produces the same output
+
+## How Smart Contracts Work
+
+1. **Creation**: Developers write the contract code using languages like Solidity (for Ethereum)
+2. **Deployment**: The contract is deployed to a blockchain, receiving a unique address
+3. **Execution**: Users interact with the contract by sending transactions to its address
+4. **State Changes**: The contract updates its state based on the transactions received
+5. **Finality**: All actions are recorded on the blockchain, providing an immutable audit trail
+
+## Applications of Smart Contracts
+
+* **Decentralized Finance (DeFi)**: Lending, borrowing, trading without intermediaries
+* **Supply Chain Management**: Tracking products from manufacturer to consumer
+* **Insurance**: Automating claims processing and payouts
+* **Digital Identity**: Self-sovereign identity management
+* **Voting Systems**: Transparent and tamper-proof elections
+* **NFT Marketplaces**: Trading digital assets with provable ownership
+* **Decentralized Autonomous Organizations (DAOs)**: Governance without central control
+
+## Limitations and Challenges
+
+* **Immutability**: Once deployed, bugs cannot be easily fixed
+* **Oracle Problem**: Accessing off-chain data reliably remains challenging
+* **Scalability**: High transaction costs during network congestion
+* **Legal Recognition**: Varying levels of legal recognition across jurisdictions
+* **Code Vulnerabilities**: Potential for exploits if not properly audited
+
+## Smart Contracts on Different Blockchains
+
+While Ethereum pioneered smart contracts, many blockchains now support them:
+
+* **Ethereum**: Uses Solidity language with the Ethereum Virtual Machine (EVM)
+* **Solana**: Offers high-speed, low-cost transactions using Rust-based contracts
+* **Cardano**: Implements formal verification for higher security
+* **Polkadot**: Enables cross-chain smart contract interoperability
+* **BNB Chain**: Provides EVM compatibility with higher throughput
+
+Smart contracts represent one of the most transformative applications of blockchain technology, enabling trustless automation across numerous industries and use cases.
+
+[NextAbout HSKChain](../About-HashKey-Chain.md)

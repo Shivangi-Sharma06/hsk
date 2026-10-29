@@ -1,0 +1,85 @@
+<!-- Source: https://docs.hskchain.net/docs/Knowledge/gas | Retrieved: 2026-10-29 | Language: English -->
+
+# 
+
+# Gas in Ethereum
+
+Gas is the unit of measurement for computational effort required to execute operations on the Ethereum network. It serves as a mechanism to allocate resources, prevent spam, and compensate miners/validators for the computational work they perform.
+
+## Purpose of Gas
+
+* **Resource Allocation**: Ensures fair distribution of network resources
+* **Spam Prevention**: Discourages malicious actors from flooding the network
+* **Miner/Validator Compensation**: Provides incentives for transaction processing
+* **Finite Computation**: Prevents infinite loops and resource exhaustion
+
+## How Gas Works
+
+Every operation in the Ethereum Virtual Machine (EVM) has a fixed gas cost that reflects its computational complexity:
+
+| Operation | Approximate Gas Cost |
+| --- | --- |
+| Addition | 3 gas |
+| Multiplication | 5 gas |
+| Storage write | 20,000+ gas |
+| Contract creation | 32,000+ gas |
+
+When sending a transaction, users specify:
+
+1. **Gas Limit**: Maximum amount of gas the transaction can consume
+2. **Max Fee Per Gas**: Maximum price willing to pay per unit of gas
+3. **Max Priority Fee**: Tip to validators for faster inclusion
+
+If a transaction runs out of gas during execution, it reverts (fails), but the gas is still consumed. Any unused gas is refunded to the sender.
+
+## Gas Price Dynamics
+
+Gas prices fluctuate based on network demand, following a market mechanism:
+
+* **High Demand**: Gas prices increase during periods of network congestion
+* **Low Demand**: Gas prices decrease when network activity is light
+
+The minimum gas price is determined by:
+
+* **Base Fee**: Algorithmically set by the network based on block fullness
+* **Priority Fee**: User-defined tip to validators for faster inclusion
+
+## EIP-1559: Fee Market Change
+
+In August 2021, Ethereum implemented EIP-1559, dramatically changing the fee structure:
+
+* **Base Fee**: Automatically adjusted based on network congestion
+* **Burning Mechanism**: Base fee is burned (removed from circulation)
+* **More Predictable Fees**: Reduces extreme price volatility
+* **Improved User Experience**: Simplifies gas price estimation
+
+## Gas Optimization Techniques
+
+Developers use various techniques to minimize gas costs:
+
+* **Efficient Storage**: Using packed variables and optimized data structures
+* **Batch Processing**: Combining multiple operations into a single transaction
+* **Gas Tokens**: Tokenizing gas during low-price periods for later use
+* **Off-chain Computation**: Moving computation off-chain when possible
+* **Assembly**: Using low-level assembly for gas-intensive operations
+
+## Gas Calculation Example
+
+For a simple ERC-20 token transfer:
+
+1. Base gas cost: ~21,000 gas (standard transaction)
+2. ERC-20 transfer: ~20,000-65,000 gas
+3. Total gas used: ~41,000-86,000 gas
+4. At 50 Gwei gas price: 0.00205-0.0043 ETH (~$4-9 at $2,000/ETH)
+
+## Gas in Layer 2 Solutions
+
+Layer 2 solutions significantly reduce gas costs by batching transactions:
+
+* **Optimistic Rollups**: ~10x gas reduction
+* **ZK Rollups**: ~20-50x gas reduction
+* **State Channels**: Near-zero gas costs for supported operations
+
+Gas remains a fundamental concept in Ethereum, representing the computational cost of blockchain operations and creating an economic framework for resource allocation.
+
+[NextAbout HSKChain](../About-HashKey-Chain.md)

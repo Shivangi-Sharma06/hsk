@@ -1,0 +1,727 @@
+{
+  "retrieved": "2026-10-29",
+  "scope": "All reachable English documentation in HashFans, HSKChain and Merchant; HashKey-specific Chainlink CCIP directory page only. External linked documentation is out of scope.",
+  "deduplication": "Exact page hashes and normalized blocks over 100 characters; distinct versions and differing facts retained.",
+  "shared_blocks_replaced": 140,
+  "pages": [
+    {
+      "path": "01-chain/Build-on-HashKey-Chain/network-info.md",
+      "title": "",
+      "source": "https://docs.hskchain.net/docs/Build-on-HashKey-Chain/network-info",
+      "sha256": "e9af8210ff7cdfe4ad307abab8348ba9d7611f2f3455f66970b9852fc274a4d9",
+      "bytes": 972
+    },
+    {
+      "path": "01-chain/About-HashKey-Chain.md",
+      "title": "",
+      "source": "https://docs.hskchain.net/docs/About-HashKey-Chain",
+      "sha256": "fe404de6455fad9caf8ffcf3eede8b444aafe2c305b5cc2888aa78bde4503616",
+      "bytes": 1430
+    },
+    {
+      "path": "01-chain/Developer-QuickStart.md",
+      "title": "",
+      "source": "https://docs.hskchain.net/docs/Developer-QuickStart",
+      "sha256": "5c3bbe6a9545889e76e13cc639ba81861638e888efaa2afafad47a5685d8ffd1",
+      "bytes": 3002
+    },
+    {
+      "path": "01-chain/Notices/Jovian-Upgrade.md",
+      "title": "Jovian Network Upgrade",
+      "source": "https://docs.hskchain.net/docs/Notices/Jovian-Upgrade",
+      "sha256": "ecf588f8ec47b318f671f207e20f4c0dc396dc101bd66ab9470dd80e3db30212",
+      "bytes": 7501
+    },
+    {
+      "path": "01-chain/Build-on-HashKey-Chain/Token-Contracts.md",
+      "title": "Token Contracts",
+      "source": "https://docs.hskchain.net/docs/Build-on-HashKey-Chain/Token-Contracts",
+      "sha256": "9ab5528f4549fe0bc1ded6a47fc42eeda31f1613e73d33f2e3249a34c7f126b7",
+      "bytes": 1482
+    },
+    {
+      "path": "01-chain/Build-on-HashKey-Chain/Contract-Addresses.md",
+      "title": "Contract Addresses",
+      "source": "https://docs.hskchain.net/docs/Build-on-HashKey-Chain/Contract-Addresses",
+      "sha256": "4d7188aedaae73b64e01bf1e1b08985df53a1a48bcf1794dcdf244c97ae304f6",
+      "bytes": 15243
+    },
+    {
+      "path": "01-chain/Build-on-HashKey-Chain/Tools/Explorer.md",
+      "title": "Block Explorer",
+      "source": "https://docs.hskchain.net/docs/Build-on-HashKey-Chain/Tools/Explorer",
+      "sha256": "be4a504eb9c30b104c140fdfa3dcff049e3fe93b5f505655670a2fa9fa09e42b",
+      "bytes": 3025
+    },
+    {
+      "path": "01-chain/Build-on-HashKey-Chain/Tools/Wallet.md",
+      "title": "Wallet",
+      "source": "https://docs.hskchain.net/docs/Build-on-HashKey-Chain/Tools/Wallet",
+      "sha256": "36beb03562f77a27e2035291e5bffdc5c3fe67fa07a2d9937669760e8d6527f2",
+      "bytes": 2259
+    },
+    {
+      "path": "01-chain/Build-on-HashKey-Chain/Tools/Faucet.md",
+      "title": "Faucets",
+      "source": "https://docs.hskchain.net/docs/Build-on-HashKey-Chain/Tools/Faucet",
+      "sha256": "5158404d4630e51f6acae2ba71303db6590c36197ebab12c8088d1a64bdfc7a7",
+      "bytes": 3330
+    },
+    {
+      "path": "01-chain/Build-on-HashKey-Chain/Tools/Safe.md",
+      "title": "Safe",
+      "source": "https://docs.hskchain.net/docs/Build-on-HashKey-Chain/Tools/Safe",
+      "sha256": "2d6ab554fee2234f3e59a9fa6b8cae167da80020647edb30d26e131fc727928e",
+      "bytes": 3661
+    },
+    {
+      "path": "01-chain/Build-on-HashKey-Chain/Tools/Oracle.md",
+      "title": "Oracles",
+      "source": "https://docs.hskchain.net/docs/Build-on-HashKey-Chain/Tools/Oracle",
+      "sha256": "edfe7e1ec1697c9468486c1b7494552c519fd560ffabb017ccc35438509f9997",
+      "bytes": 6090
+    },
+    {
+      "path": "01-chain/Build-on-HashKey-Chain/Tools/Bridges.md",
+      "title": "",
+      "source": "https://docs.hskchain.net/docs/Build-on-HashKey-Chain/Tools/Bridges",
+      "sha256": "c5f6c040a7f57266e9aafe301952edc1d1d554bd7f3662760505bf0a9de467fb",
+      "bytes": 1235
+    },
+    {
+      "path": "01-chain/Build-on-HashKey-Chain/Tools/KYC.md",
+      "title": "",
+      "source": "https://docs.hskchain.net/docs/Build-on-HashKey-Chain/Tools/KYC",
+      "sha256": "47f70aa36aa58c5d409426ee2af2b073b5aacd837b5bae7f7ef485a0e1487b29",
+      "bytes": 6014
+    },
+    {
+      "path": "01-chain/Build-on-HashKey-Chain/Tools/Subgraph.md",
+      "title": "Using Subgraph on HSKChain",
+      "source": "https://docs.hskchain.net/docs/Build-on-HashKey-Chain/Tools/Subgraph",
+      "sha256": "f3c67042daa55c2a02253d24aa472a068ad198c1387ac205a88993f722a8bf18",
+      "bytes": 4209
+    },
+    {
+      "path": "01-chain/Build-on-HashKey-Chain/Fee.md",
+      "title": "Transaction Fees",
+      "source": "https://docs.hskchain.net/docs/Build-on-HashKey-Chain/Fee",
+      "sha256": "9d417a4f88392b79024a55387206d527ba941354331c416c00b55a6b76797902",
+      "bytes": 1771
+    },
+    {
+      "path": "01-chain/Build-on-HashKey-Chain/RPC-Node-Provider.md",
+      "title": "RPC & Node Provider",
+      "source": "https://docs.hskchain.net/docs/Build-on-HashKey-Chain/RPC-Node-Provider",
+      "sha256": "ef080eb6880e696bee57a6989621f7777ddbf3a0b52b2a4405e67514a34968cf",
+      "bytes": 8599
+    },
+    {
+      "path": "01-chain/Build-on-HashKey-Chain/Flashblocks.md",
+      "title": "Flashblocks",
+      "source": "https://docs.hskchain.net/docs/Build-on-HashKey-Chain/Flashblocks",
+      "sha256": "a48c857db365d18f95942302f5ac65bddaacede0b5cbaf866ee9a108607b72a7",
+      "bytes": 1901
+    },
+    {
+      "path": "01-chain/Learn/Welcome.md",
+      "title": "",
+      "source": "https://docs.hskchain.net/docs/Learn/Welcome",
+      "sha256": "81e526709266c99da2ba2224176e12801ab8241a89cd3d4c0815c9bc384d8211",
+      "bytes": 3367
+    },
+    {
+      "path": "01-chain/Learn/Bitcoin-and-Blockchain.md",
+      "title": "",
+      "source": "https://docs.hskchain.net/docs/Learn/Bitcoin-and-Blockchain",
+      "sha256": "97ca1b73d19f8cd9ec30e818b709e4e073590aa7eccfef5428471345d12722a6",
+      "bytes": 2560
+    },
+    {
+      "path": "01-chain/Learn/Ethereum-More/Introduction.md",
+      "title": "",
+      "source": "https://docs.hskchain.net/docs/Learn/Ethereum-More/Introduction",
+      "sha256": "f8ddea3b4640d5679b70b15f093bf0f68732f90e63ea3f1b5204912887aabc9b",
+      "bytes": 6173
+    },
+    {
+      "path": "01-chain/Learn/Ethereum-More/Ethereum-Technology.md",
+      "title": "",
+      "source": "https://docs.hskchain.net/docs/Learn/Ethereum-More/Ethereum-Technology",
+      "sha256": "8c38ff652d40aa771e4b54f21ceb6f8b96c08df91f5b42e689d9b50f89a7143f",
+      "bytes": 10984
+    },
+    {
+      "path": "01-chain/Learn/Ethereum-More/Ethereum-Applications.md",
+      "title": "",
+      "source": "https://docs.hskchain.net/docs/Learn/Ethereum-More/Ethereum-Applications",
+      "sha256": "44124907a86e55a55cc20e276bbb5be58709ac4b0498c0e81fb9be0adb7cac1a",
+      "bytes": 12192
+    },
+    {
+      "path": "01-chain/Learn/Ethereum-More/Gas-Fee-Calculation.md",
+      "title": "",
+      "source": "https://docs.hskchain.net/docs/Learn/Ethereum-More/Gas-Fee-Calculation",
+      "sha256": "a9bbe6be97864c98c252eb935482a70eb89f50616693dfb3cf43a0865a52bebe",
+      "bytes": 6795
+    },
+    {
+      "path": "01-chain/Learn/Ethereum-More/Explorer-Wallet.md",
+      "title": "",
+      "source": "https://docs.hskchain.net/docs/Learn/Ethereum-More/Explorer-Wallet",
+      "sha256": "5565d59a01e543e19e818f148ec79e2a72c261fada6a43322c525cf1a080c32d",
+      "bytes": 11614
+    },
+    {
+      "path": "01-chain/Knowledge.md",
+      "title": "",
+      "source": "https://docs.hskchain.net/docs/Knowledge",
+      "sha256": "64e4347da03658dd02d3c2c0c912a7433c9cb4d1224b9abf38f6359a25ef3f00",
+      "bytes": 3843
+    },
+    {
+      "path": "01-chain/Knowledge/layer-1.md",
+      "title": "",
+      "source": "https://docs.hskchain.net/docs/Knowledge/layer-1",
+      "sha256": "ad51c05600abd41699dafa1a240653ec06293908cc33a6fb42a2588abc8f1a87",
+      "bytes": 6590
+    },
+    {
+      "path": "01-chain/Knowledge/layer-2.md",
+      "title": "",
+      "source": "https://docs.hskchain.net/docs/Knowledge/layer-2",
+      "sha256": "1325b4c5ec4e36b972f4f93175f2311aefd86ce5375e21ab3dd7eb7574d2676e",
+      "bytes": 11697
+    },
+    {
+      "path": "01-chain/Knowledge/pow.md",
+      "title": "",
+      "source": "https://docs.hskchain.net/docs/Knowledge/pow",
+      "sha256": "9e3783e13535683d196e0a91993570027f7554b5bf8e725a4983b935b9dc57b0",
+      "bytes": 5746
+    },
+    {
+      "path": "01-chain/Knowledge/pos.md",
+      "title": "",
+      "source": "https://docs.hskchain.net/docs/Knowledge/pos",
+      "sha256": "9d24f742c50d5b17b2d3842b3295d684921dc1d01534e85348fa4f48c7fa030e",
+      "bytes": 10468
+    },
+    {
+      "path": "01-chain/Knowledge/dpos.md",
+      "title": "",
+      "source": "https://docs.hskchain.net/docs/Knowledge/dpos",
+      "sha256": "3dc5511d7d91af8715e35a0ac1ff56cd52eef2c4e36b15c5e8b3e67423eb9568",
+      "bytes": 4198
+    },
+    {
+      "path": "01-chain/Knowledge/poa.md",
+      "title": "",
+      "source": "https://docs.hskchain.net/docs/Knowledge/poa",
+      "sha256": "12a001e6da4960c176e4a2cb9578ae42be45bb19b9b3d98405ff4b1b4a3415b1",
+      "bytes": 4471
+    },
+    {
+      "path": "01-chain/Knowledge/smart-contracts.md",
+      "title": "",
+      "source": "https://docs.hskchain.net/docs/Knowledge/smart-contracts",
+      "sha256": "a3229266809be2223737c83754f7b1360bc1e1f46063cfc60b216327e5a28d88",
+      "bytes": 2932
+    },
+    {
+      "path": "01-chain/Knowledge/evm.md",
+      "title": "",
+      "source": "https://docs.hskchain.net/docs/Knowledge/evm",
+      "sha256": "d106d1870c80963da455d5be4e540e1f887ba10ce1b015ce4cb2944977fb8a41",
+      "bytes": 3651
+    },
+    {
+      "path": "01-chain/Knowledge/gas.md",
+      "title": "",
+      "source": "https://docs.hskchain.net/docs/Knowledge/gas",
+      "sha256": "a947193ef020c6433142f16a6bf432ea4aafe5a123c691acc3d7968a4b414da6",
+      "bytes": 3426
+    },
+    {
+      "path": "01-chain/Knowledge/erc20.md",
+      "title": "",
+      "source": "https://docs.hskchain.net/docs/Knowledge/erc20",
+      "sha256": "9ea1ba5c5166d635d2528f8ef91d4d9383d7890be3da62d4cc8ebc10f34a77cd",
+      "bytes": 6287
+    },
+    {
+      "path": "01-chain/Knowledge/nft.md",
+      "title": "",
+      "source": "https://docs.hskchain.net/docs/Knowledge/nft",
+      "sha256": "454fc81dff60d590af8e7fd3d96b1c712cc22ce64318dabd58b3a50341ff79a8",
+      "bytes": 5819
+    },
+    {
+      "path": "01-chain/Knowledge/defi.md",
+      "title": "",
+      "source": "https://docs.hskchain.net/docs/Knowledge/defi",
+      "sha256": "39db9685a8c63f37159d899f13db77f5aeb677d8dc04eebacee97588a680c513",
+      "bytes": 4677
+    },
+    {
+      "path": "01-chain/Knowledge/optimistic-rollups.md",
+      "title": "",
+      "source": "https://docs.hskchain.net/docs/Knowledge/optimistic-rollups",
+      "sha256": "5abe21047b837befebaeb97ee1939389ea36771fa528656d91acb01a0b262a39",
+      "bytes": 4892
+    },
+    {
+      "path": "01-chain/Knowledge/zk-rollups.md",
+      "title": "",
+      "source": "https://docs.hskchain.net/docs/Knowledge/zk-rollups",
+      "sha256": "207f40674f5996e1483ad40a0df54ad5aa06293d189e2759c5d44831f4ea059a",
+      "bytes": 5486
+    },
+    {
+      "path": "01-chain/Knowledge/ens.md",
+      "title": "",
+      "source": "https://docs.hskchain.net/docs/Knowledge/ens",
+      "sha256": "4835f2a8c6286da20da6fdb926099b834355c8841b2fd98ba71b4da9ddadd0a8",
+      "bytes": 5199
+    },
+    {
+      "path": "02-hashfans/About-HashKey-Chain.md",
+      "title": "About HashKey Chain",
+      "source": "https://hashfans.io/docs/About-HashKey-Chain",
+      "sha256": "4e08c459b3eb99d45e41ca859c28e1739248d1efae9e9ac71c7cc0e8296b1078",
+      "bytes": 998
+    },
+    {
+      "path": "02-hashfans/Developer-QuickStart.md",
+      "title": "Developer QuickStart",
+      "source": "https://hashfans.io/docs/Developer-QuickStart",
+      "sha256": "b9f6cc11bd8631377fa446d4f4145a4d7f148251d4b344367243d08632f50adb",
+      "bytes": 3318
+    },
+    {
+      "path": "02-hashfans/Build-on-HashKey-Chain/network-info.md",
+      "title": "Network Info",
+      "source": "https://hashfans.io/docs/Build-on-HashKey-Chain/network-info",
+      "sha256": "4f692d6533a1475e7aa6c3d912e8ea11a34b56ae4af24f22064817160dba309c",
+      "bytes": 1356
+    },
+    {
+      "path": "02-hashfans/Build-on-HashKey-Chain/Tools/Explorer.md",
+      "title": "Explorer",
+      "source": "https://hashfans.io/docs/Build-on-HashKey-Chain/Tools/Explorer",
+      "sha256": "2f06afbfca3c36e67c081e650d5c9498910959498d993ddf3b405be3ec94df2a",
+      "bytes": 2748
+    },
+    {
+      "path": "02-hashfans/Build-on-HashKey-Chain/Tools/Wallet.md",
+      "title": "Wallets",
+      "source": "https://hashfans.io/docs/Build-on-HashKey-Chain/Tools/Wallet",
+      "sha256": "c5c24fd0c290910e691e8cfa0604c13613ea92d45b0dd573df31a211c00760f5",
+      "bytes": 1910
+    },
+    {
+      "path": "02-hashfans/Build-on-HashKey-Chain/Tools/Faucet.md",
+      "title": "Faucet",
+      "source": "https://hashfans.io/docs/Build-on-HashKey-Chain/Tools/Faucet",
+      "sha256": "8e5367a0166b065c42ea8f44bd5a1d3a53e445edd6603de5946939afabcdcf19",
+      "bytes": 3239
+    },
+    {
+      "path": "02-hashfans/Build-on-HashKey-Chain/Tools/Safe.md",
+      "title": "Safe",
+      "source": "https://hashfans.io/docs/Build-on-HashKey-Chain/Tools/Safe",
+      "sha256": "2173da11bc11fe698074191a56c97c04f1b1b8dcf356f2644ca93c8308cd63f3",
+      "bytes": 3363
+    },
+    {
+      "path": "02-hashfans/Build-on-HashKey-Chain/Tools/Oracle.md",
+      "title": "Oracle",
+      "source": "https://hashfans.io/docs/Build-on-HashKey-Chain/Tools/Oracle",
+      "sha256": "397d997b721b117bc10f372583dd4cec2126db0be689492c3b8bae47f84b20ac",
+      "bytes": 5929
+    },
+    {
+      "path": "02-hashfans/Build-on-HashKey-Chain/Tools/Bridges.md",
+      "title": "Bridges",
+      "source": "https://hashfans.io/docs/Build-on-HashKey-Chain/Tools/Bridges",
+      "sha256": "4a33dde36a6c0b5b2ffa7f65185b9399b091c6477d5131ad0f5c69e71f9906bc",
+      "bytes": 1231
+    },
+    {
+      "path": "02-hashfans/Build-on-HashKey-Chain/Tools/KYC.md",
+      "title": "KYC",
+      "source": "https://hashfans.io/docs/Build-on-HashKey-Chain/Tools/KYC",
+      "sha256": "932ab4efafef524426edad58fed9168135473bcdf5d9188a3e5d9f25265c901e",
+      "bytes": 5999
+    },
+    {
+      "path": "02-hashfans/Build-on-HashKey-Chain/Tools/Subgraph.md",
+      "title": "Subgraph",
+      "source": "https://hashfans.io/docs/Build-on-HashKey-Chain/Tools/Subgraph",
+      "sha256": "9d36410357b4fdf5195f198b1c125a40a0706b1a7d05f300d97d3be35240a411",
+      "bytes": 4067
+    },
+    {
+      "path": "02-hashfans/Build-on-HashKey-Chain/Fee.md",
+      "title": "Fee",
+      "source": "https://hashfans.io/docs/Build-on-HashKey-Chain/Fee",
+      "sha256": "e1bad0fbfe79d2f625792094d98b748e70c17c004a61af86ed8d0fb0757e5e5d",
+      "bytes": 1665
+    },
+    {
+      "path": "02-hashfans/Build-on-HashKey-Chain/RPC-Node-Provider.md",
+      "title": "RPC & Node Provider",
+      "source": "https://hashfans.io/docs/Build-on-HashKey-Chain/RPC-Node-Provider",
+      "sha256": "31c1eceea3424697c9a04e96bd387a89c24c250f0f9840d3dccce5364a35a5e3",
+      "bytes": 5462
+    },
+    {
+      "path": "02-hashfans/Learn/Welcome.md",
+      "title": "Welcome",
+      "source": "https://hashfans.io/docs/Learn/Welcome",
+      "sha256": "f38cfc4cbccc805108ed01beb82a38071dc947060108004e7ffd5ac40d3afd76",
+      "bytes": 3290
+    },
+    {
+      "path": "02-hashfans/Learn/Bitcoin-and-Blockchain.md",
+      "title": "Bitcoin-and-Blockchain",
+      "source": "https://hashfans.io/docs/Learn/Bitcoin-and-Blockchain",
+      "sha256": "cc21ec22eddc9bcc14638febfbb7f758fd3d1b4bb9d4579a690dfaf4d0a2e723",
+      "bytes": 2237
+    },
+    {
+      "path": "02-hashfans/Learn/Ethereum-More/Introduction.md",
+      "title": "Introduction",
+      "source": "https://hashfans.io/docs/Learn/Ethereum-More/Introduction",
+      "sha256": "c135cd4861a8d0cc980b9fb5fe2f74fcdef680c1649f4331c124cb24a13b77c2",
+      "bytes": 5376
+    },
+    {
+      "path": "02-hashfans/Learn/Ethereum-More/Ethereum-Technology.md",
+      "title": "Ethereum-Technology",
+      "source": "https://hashfans.io/docs/Learn/Ethereum-More/Ethereum-Technology",
+      "sha256": "f1206abdc3568ea93a79859c0db463fbf41c7122286b210d3d2001471a503f34",
+      "bytes": 10885
+    },
+    {
+      "path": "02-hashfans/Learn/Ethereum-More/Ethereum-Applications.md",
+      "title": "Ethereum-Applications",
+      "source": "https://hashfans.io/docs/Learn/Ethereum-More/Ethereum-Applications",
+      "sha256": "b598e58cdb5e65dd50cef11030e477691666d86138eac85322c7bd3e952cf07f",
+      "bytes": 12515
+    },
+    {
+      "path": "02-hashfans/Learn/Ethereum-More/Gas-Fee-Calculation.md",
+      "title": "Gas-Fee-Calculation",
+      "source": "https://hashfans.io/docs/Learn/Ethereum-More/Gas-Fee-Calculation",
+      "sha256": "4edf665fe8a0559e5f64e66f877848423c8904b168d3eca723b42cac98056967",
+      "bytes": 6537
+    },
+    {
+      "path": "02-hashfans/Learn/Ethereum-More/Explorer-Wallet.md",
+      "title": "Explorer-Wallet",
+      "source": "https://hashfans.io/docs/Learn/Ethereum-More/Explorer-Wallet",
+      "sha256": "fc0d1e11573bdbc2c1c96ccb0a89f50aa7695ac635b477a29055671332c309eb",
+      "bytes": 10774
+    },
+    {
+      "path": "02-hashfans/Knowledge/blockchain.md",
+      "title": "Blockchain",
+      "source": "https://hashfans.io/docs/Knowledge/blockchain",
+      "sha256": "ce9fb34b1c89047af51bee800a09fbbcd960063cce8a0f71b1abf92ec8a85a2c",
+      "bytes": 4015
+    },
+    {
+      "path": "02-hashfans/Knowledge/Cross-Chain-Bridge.md",
+      "title": "Cross Chain Bridge",
+      "source": "https://hashfans.io/docs/Knowledge/Cross-Chain-Bridge",
+      "sha256": "d5f4326f8af74c100626893431e5cc059c9af0b6ff487dc9c216516294a16b34",
+      "bytes": 6951
+    },
+    {
+      "path": "02-hashfans/Knowledge/cryptography.md",
+      "title": "Cryptography",
+      "source": "https://hashfans.io/docs/Knowledge/cryptography",
+      "sha256": "94f2e501f957f4add601726772f0bf29f4dc63789eddfc304e68411755c8e4b8",
+      "bytes": 4850
+    },
+    {
+      "path": "02-hashfans/Knowledge/dao.md",
+      "title": "Dao",
+      "source": "https://hashfans.io/docs/Knowledge/dao",
+      "sha256": "944e63422af123c725149c2c04aa169c27126c6703d4d1e52f4c3ec65c00baa7",
+      "bytes": 4845
+    },
+    {
+      "path": "02-hashfans/Knowledge/defi.md",
+      "title": "Defi",
+      "source": "https://hashfans.io/docs/Knowledge/defi",
+      "sha256": "e1bfd9b25a6e59bca936ee0165ac929798c07649212bc5f501ffa7d17e104bef",
+      "bytes": 4294
+    },
+    {
+      "path": "02-hashfans/Knowledge/dpos.md",
+      "title": "Dpos",
+      "source": "https://hashfans.io/docs/Knowledge/dpos",
+      "sha256": "a802c2161c325062e1a15d7e5f917ea72158ad1ef054c517ec07178274cc6518",
+      "bytes": 3208
+    },
+    {
+      "path": "02-hashfans/Knowledge/ens.md",
+      "title": "Ens",
+      "source": "https://hashfans.io/docs/Knowledge/ens",
+      "sha256": "4d7901006a005df19a19d566b4c5d416eae4ca211d15bee328b0648de7e0648a",
+      "bytes": 4542
+    },
+    {
+      "path": "02-hashfans/Knowledge/erc20.md",
+      "title": "Erc20",
+      "source": "https://hashfans.io/docs/Knowledge/erc20",
+      "sha256": "213eb52ad3cda18384e8e229aaa5c4552ab20cc08fd3ed2cfed169cffe2cd969",
+      "bytes": 5660
+    },
+    {
+      "path": "02-hashfans/Knowledge/ethereum-merge.md",
+      "title": "Ethereum Merge",
+      "source": "https://hashfans.io/docs/Knowledge/ethereum-merge",
+      "sha256": "6553f266152bbbdae42e87a2b0ac0e8e4263eba04c3e48df0252ccea2d64c847",
+      "bytes": 7283
+    },
+    {
+      "path": "02-hashfans/Knowledge/evm.md",
+      "title": "Evm",
+      "source": "https://hashfans.io/docs/Knowledge/evm",
+      "sha256": "6418b79189fa9eb2be60c2df9645ce58f0f47aaf215b944e181ed5714eb39315",
+      "bytes": 3119
+    },
+    {
+      "path": "02-hashfans/Knowledge/gas.md",
+      "title": "Gas",
+      "source": "https://hashfans.io/docs/Knowledge/gas",
+      "sha256": "bb3af8fc2e0ae0d16d92374a34fcbdceb3cd1b666d900d85c49958d0ce2d665d",
+      "bytes": 2859
+    },
+    {
+      "path": "02-hashfans/Knowledge/Gas-optimization.md",
+      "title": "Gas Optimization",
+      "source": "https://hashfans.io/docs/Knowledge/Gas-optimization",
+      "sha256": "4c370cc5b2cb28d422845652cca4cbf9c7d2a881405fe7b51d0f2aab5826972c",
+      "bytes": 8268
+    },
+    {
+      "path": "02-hashfans/Knowledge/layer-1.md",
+      "title": "Layer 1",
+      "source": "https://hashfans.io/docs/Knowledge/layer-1",
+      "sha256": "4b24314a589becdb57c24dc313e8abdff009cb2abc60f912bb5f0a7c19cf6a06",
+      "bytes": 3654
+    },
+    {
+      "path": "02-hashfans/Knowledge/layer-2.md",
+      "title": "Layer 2",
+      "source": "https://hashfans.io/docs/Knowledge/layer-2",
+      "sha256": "60640af547c9b19a141e569be301ba4b68bfb985d9d95428569f4c2041b78b8a",
+      "bytes": 8195
+    },
+    {
+      "path": "02-hashfans/Knowledge/merkle-tree.md",
+      "title": "Merkle Tree",
+      "source": "https://hashfans.io/docs/Knowledge/merkle-tree",
+      "sha256": "400fec8e974f720a6b5bd0ed916bbe1276a0a945b530fb05b48ac2243e4f7439",
+      "bytes": 3233
+    },
+    {
+      "path": "02-hashfans/Knowledge/nft.md",
+      "title": "Nft",
+      "source": "https://hashfans.io/docs/Knowledge/nft",
+      "sha256": "67ce53424a95fae15e5f97f829667a598ecdb4bd572c55afafcb4f56ab97f8ae",
+      "bytes": 5430
+    },
+    {
+      "path": "02-hashfans/Knowledge/optimistic-rollups.md",
+      "title": "Optimistic Rollups",
+      "source": "https://hashfans.io/docs/Knowledge/optimistic-rollups",
+      "sha256": "c2517d125a30c4034130c0fb4fb81d7cd28208427c89401f72ab00aef64ad6bc",
+      "bytes": 3493
+    },
+    {
+      "path": "02-hashfans/Knowledge/Patricia-Trie.md",
+      "title": "Patricia Trie",
+      "source": "https://hashfans.io/docs/Knowledge/Patricia-Trie",
+      "sha256": "95e245d49869f30c7b07bfb3abd66f0fe8ad69d69296b01b2d3debc3031f7a81",
+      "bytes": 5602
+    },
+    {
+      "path": "02-hashfans/Knowledge/51-percent-attack.md",
+      "title": "Percent Attack",
+      "source": "https://hashfans.io/docs/Knowledge/51-percent-attack",
+      "sha256": "af5983acf878cee7d2a5a608116d04c99bad73253978ffbe84e264b699d3f879",
+      "bytes": 4415
+    },
+    {
+      "path": "02-hashfans/Knowledge/poa.md",
+      "title": "Poa",
+      "source": "https://hashfans.io/docs/Knowledge/poa",
+      "sha256": "e9aa8db804628e889a2d2704b5f177d7459c447c2f7adf90022dd889d2fc8ab5",
+      "bytes": 3308
+    },
+    {
+      "path": "02-hashfans/Knowledge/pos.md",
+      "title": "Pos",
+      "source": "https://hashfans.io/docs/Knowledge/pos",
+      "sha256": "4e1053dd7aa886f47da7f439541b2ff1d954aa99e8339fed058c65d7ea752b4b",
+      "bytes": 5690
+    },
+    {
+      "path": "02-hashfans/Knowledge/pow.md",
+      "title": "Pow",
+      "source": "https://hashfans.io/docs/Knowledge/pow",
+      "sha256": "2ef8645d678761cc448a9a8c6ac8de83663e1c60abd5e5a76a8d1ed80b6d891d",
+      "bytes": 2914
+    },
+    {
+      "path": "02-hashfans/Knowledge/Reentrancy-Attack.md",
+      "title": "Reentrancy Attack",
+      "source": "https://hashfans.io/docs/Knowledge/Reentrancy-Attack",
+      "sha256": "5c11c53d4c4aa3d760d75ece82dc1453a407e438db3bd648fa99d14aef175ad9",
+      "bytes": 9074
+    },
+    {
+      "path": "02-hashfans/Knowledge/risc-v.md",
+      "title": "Risc V",
+      "source": "https://hashfans.io/docs/Knowledge/risc-v",
+      "sha256": "48dd3b52df74e8f69f7d0c4893a6ebd58f4a9ca3f55b59b7d85eeb9aea9560c0",
+      "bytes": 8866
+    },
+    {
+      "path": "02-hashfans/Knowledge/rollups.md",
+      "title": "Rollups",
+      "source": "https://hashfans.io/docs/Knowledge/rollups",
+      "sha256": "d3254a8773cdf75e6da9705a60a322d07a3094e9a53bcff3880f02f15373532f",
+      "bytes": 8949
+    },
+    {
+      "path": "02-hashfans/Knowledge/RPC.md",
+      "title": "RPC",
+      "source": "https://hashfans.io/docs/Knowledge/RPC",
+      "sha256": "b78cb02fdf756a82352c55ae257ee6818e0d4f6dead0890a53f2d93cbaab3e84",
+      "bytes": 5703
+    },
+    {
+      "path": "02-hashfans/Knowledge/smart-contracts.md",
+      "title": "Smart Contracts",
+      "source": "https://hashfans.io/docs/Knowledge/smart-contracts",
+      "sha256": "63a7052c23c81a2fd5f0eef6b9cdf4007ca8d6c861360dbdba9e08e2de665ec4",
+      "bytes": 2355
+    },
+    {
+      "path": "02-hashfans/Knowledge/zk-proofs.md",
+      "title": "Zk Proofs",
+      "source": "https://hashfans.io/docs/Knowledge/zk-proofs",
+      "sha256": "b47fa0490053c8af1aacb62efe6e672998da172015ab8fc8e086334543fc66a3",
+      "bytes": 8369
+    },
+    {
+      "path": "02-hashfans/Knowledge/zk-rollups.md",
+      "title": "Zk Rollups",
+      "source": "https://hashfans.io/docs/Knowledge/zk-rollups",
+      "sha256": "d00b9483643367e82fc9ace1e4e9c6c283ad09b016b5ab1be60de087110b3b79",
+      "bytes": 4420
+    },
+    {
+      "path": "02-hashfans/Knowledge/zk-snark.md",
+      "title": "Zk Snark",
+      "source": "https://hashfans.io/docs/Knowledge/zk-snark",
+      "sha256": "0ed1325918752acbe430cee15fe4a163e9bd5cc5a8f65549c386cc117b77e7c7",
+      "bytes": 5938
+    },
+    {
+      "path": "02-hashfans/Knowledge/zk-stark.md",
+      "title": "Zk Stark",
+      "source": "https://hashfans.io/docs/Knowledge/zk-stark",
+      "sha256": "06bb0f174b4a2002aba33b17e406559f8076587bffa4d3a862f295021e43aa6b",
+      "bytes": 6304
+    },
+    {
+      "path": "02-hashfans/Knowledge.md",
+      "title": "Knowledge",
+      "source": "https://hashfans.io/docs/Knowledge",
+      "sha256": "fa0b76fdffab6dc493804e8a84f0e2bbc32855ed8d0a8cd97114aeda30ffecd7",
+      "bytes": 168
+    },
+    {
+      "path": "02-hashfans/HSP.md",
+      "title": "Building on HSP \u2014 Developer Guide",
+      "source": "https://hashfans.io/docs/HSP",
+      "sha256": "268dd05a5f936fd8b50208694dc525c6f4890393d77aab34b928f2a3b807a82b",
+      "bytes": 12372
+    },
+    {
+      "path": "03-merchant/README.md",
+      "title": "HashKey Merchant",
+      "source": "https://hashkey-merchant.github.io/docs/en/README.md",
+      "sha256": "f5abd80e4e62cad65e8d5b6781a32350d553d374739a0686c75e7215e26b266c",
+      "bytes": 7616
+    },
+    {
+      "path": "03-merchant/cart-mandate.md",
+      "title": "Building a Cart Mandate",
+      "source": "https://hashkey-merchant.github.io/docs/en/cart-mandate.md",
+      "sha256": "fb40796f29c7dab8362f4977a676d719bba91dc7751d159f33ca3c23d32fa478",
+      "bytes": 12678
+    },
+    {
+      "path": "03-merchant/api-reference.md",
+      "title": "API reference",
+      "source": "https://hashkey-merchant.github.io/docs/en/api-reference.md",
+      "sha256": "bce637b9a2beee1dbe4240271e4e467f5a62e88d8de35ebed83059cc2d1862a7",
+      "bytes": 13866
+    },
+    {
+      "path": "03-merchant/onboarding.md",
+      "title": "Merchant onboarding",
+      "source": "https://hashkey-merchant.github.io/docs/en/onboarding.md",
+      "sha256": "debd47d9c4cb23eb8d346f9faa67cd40719830855413a2f2e3c915de363ae104",
+      "bytes": 4214
+    },
+    {
+      "path": "03-merchant/authentication.md",
+      "title": "Authentication & signing",
+      "source": "https://hashkey-merchant.github.io/docs/en/authentication.md",
+      "sha256": "f4c9f76a738b8fa4eda6b1e805c836c88fc4ee5d80f0234db00f344015f6709f",
+      "bytes": 4876
+    },
+    {
+      "path": "03-merchant/webhook.md",
+      "title": "Webhook payment notifications",
+      "source": "https://hashkey-merchant.github.io/docs/en/webhook.md",
+      "sha256": "5d03585720fc9c1c7d883db7c89b26e3bb4cf4233022301c4fb6772345ae9d89",
+      "bytes": 7204
+    },
+    {
+      "path": "03-merchant/appendix.md",
+      "title": "Appendix",
+      "source": "https://hashkey-merchant.github.io/docs/en/appendix.md",
+      "sha256": "33dc60eb7a3822192a3f23b1b849a1b0b8b83b4dc7907c9b2e2585b3c8773bfb",
+      "bytes": 2984
+    },
+    {
+      "path": "04-chainlink/hashkey-mainnet.md",
+      "title": "HashKey Chain CCIP mainnet",
+      "source": "https://docs.chain.link/ccip/directory/mainnet/chain/ethereum-mainnet-hashkey-1",
+      "sha256": "cc91c27a30bba8fb60c02ef04fa75e85f7ccaca11e24e521207df5aa0f01033d",
+      "bytes": 8739
+    }
+  ],
+  "errors": [
+    {
+      "url": "https://docs.hskchain.net/docs/Learn/Ethereum%20More/Ethereum%20Dev",
+      "error": "404 Client Error: Not Found for url: https://docs.hskchain.net/docs/Learn/Ethereum%20More/Ethereum%20Dev"
+    }
+  ],
+  "notes": [
+    "Chainlink lane and token component properties were captured to retain data behind interactive controls.",
+    "A linked legacy Ethereum Dev page returns 404; no source content was fabricated.",
+    "English equivalents replace Chinese UI labels in the explorer/wallet guides.",
+    "Chinese example status_reason strings are translated to English; field names and values otherwise follow source documentation."
+  ]
+}

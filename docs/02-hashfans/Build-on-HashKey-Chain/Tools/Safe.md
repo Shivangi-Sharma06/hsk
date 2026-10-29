@@ -1,0 +1,81 @@
+<!-- Source: https://hashfans.io/docs/Build-on-HashKey-Chain/Tools/Safe | Retrieved: 2026-10-29 | Language: English -->
+
+## Introduction to Safe
+
+Safe enables teams, organizations, and individuals to securely manage their digital assets and interact with decentralized applications on HashKey Chain. By requiring multiple signatures to confirm transactions, Safe significantly increases security and reduces the risk of unauthorized access.
+
+### Key Features
+
+- **Multi-signature Security**: Require multiple confirmations for any transaction
+- **Role-based Access Control**: Assign different permissions to different members
+- **Transaction Batching**: Execute multiple transactions in a single operation
+- **Spending Limits**: Set daily limits for specific users or operations
+- **Mobile Support**: Manage your Safe from both desktop and mobile devices
+- **Cross-Chain Compatibility**: Consistent interface across multiple blockchains
+
+## Available Instances
+
+HashKey Chain provides officially supported instances of Safe for both production and development purposes.
+
+### Mainnet Safe
+
+The production version of Safe is available for managing assets on HashKey Chain Mainnet.
+
+[Access HashKey Chain Mainnet Safe](https://safe.hsk.xyz/welcome?chain=HSK)
+
+```javascript
+// Example: Retrieving Safe information using Safe SDK
+import { SafeApiKit, SafeFactory } from '@safe-global/api-kit'
+
+// Connect to HashKey Chain Mainnet Safe
+const safeService = new SafeApiKit({
+  txServiceUrl: 'https://safe-transaction-hashkey.safe.global',
+  ethAdapter: ethAdapter
+})
+
+// Retrieve Safe details
+const safeInfo = await safeService.getSafeInfo(safeAddress)
+```
+
+### Testnet Safe
+
+For development and testing, use the HashKey Chain Testnet Safe instance.
+
+[Access HashKey Chain Testnet Safe](https://testnet-safe.hsk.xyz/welcome?chain=HSKT)
+
+<Note title="Testing Environment">
+  The testnet Safe instance is perfect for development and testing. Use it with testnet HSK tokens from the [HashKey Chain Testnet Faucet](Faucet.md) to practice Safe operations in a risk-free environment.
+</Note>
+
+## Getting Started with Safe
+
+To create and manage a Safe on HashKey Chain:
+
+1. **Create a Safe**
+   - Visit the appropriate Safe instance based on your network (mainnet or testnet)
+   - Connect your wallet
+   - Click "Create new Safe" and follow the setup wizard
+   - Set owners (signers) and threshold (required confirmations)
+
+2. **Fund Your Safe**
+   - Transfer HSK to your Safe's address to cover transaction fees
+   - For testnet, obtain test HSK from the [faucet](Faucet.md)
+
+3. **Create Transactions**
+   - Initiate transactions from the Safe interface
+   - Specify recipient address, amount, and other parameters
+   - Submit the transaction for signatures
+
+4. **Confirm Transactions**
+   - Required number of owners must sign the transaction
+   - Once threshold is reached, any owner can execute the transaction
+
+*Shared source content: see [01-chain/Build-on-HashKey-Chain/Tools/Safe.md](../../../01-chain/Build-on-HashKey-Chain/Tools/Safe.md).*
+
+## Developer Resources
+
+- [Safe Documentation](https://docs.safe.global/)
+- [Safe Core SDK](https://github.com/safe-global/safe-core-sdk)
+- [Safe Transaction Service](https://github.com/safe-global/safe-transaction-service)
+
+For enterprise use cases or integration support, contact the HashKey Chain developer relations team.

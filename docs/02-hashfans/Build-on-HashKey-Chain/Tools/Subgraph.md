@@ -1,0 +1,170 @@
+<!-- Source: https://hashfans.io/docs/Build-on-HashKey-Chain/Tools/Subgraph | Retrieved: 2026-10-29 | Language: English -->
+
+# Using Subgraph on HashKey Chain
+
+## Introduction
+
+Subgraph is a powerful indexing protocol for querying blockchain data on HashKey Chain. This guide will help you understand how to build, deploy, and use subgraphs for efficient data indexing and querying.
+
+## Network Information
+
+HashKey Chain Mainnet details for Subgraph integration:
+
+- **Type**: mainnet
+- **Protocol**: ethereum
+- **Network Identifier**: hashkeychain
+- **Chain ID**: eip155:177
+- **Native Currency**: HSK
+
+## Getting Started
+
+### Prerequisites
+
+Before you begin, make sure you have the following installed:
+
+- Node.js (v14 or later)
+- Graph CLI (`@graphprotocol/graph-cli`)
+- Graph TypeScript (`@graphprotocol/graph-ts`)
+
+Install the required dependencies:
+
+```bash
+npm install -g @graphprotocol/graph-cli
+npm install @graphprotocol/graph-ts
+```
+
+### Creating Your First Subgraph
+
+1. Initialize a new subgraph project:
+```bash
+graph init --product hosted-service \
+  --from-example \
+  --protocol ethereum \
+  --network hashkeychain \
+  --contract-name YourContract \
+  --index-events
+```
+
+2. Define your schema in `schema.graphql`:
+```graphql
+type Entity @entity {
+  id: ID!
+  count: BigInt!
+  timestamp: BigInt!
+}
+```
+
+## Subgraph Manifest
+
+Create a `subgraph.yaml` configuration:
+
+```yaml
+specVersion: 0.0.4
+schema:
+  file: ./schema.graphql
+dataSources:
+  - kind: ethereum
+    name: YourContract
+    network: hashkeychain
+    source:
+      address: "0x..."
+      abi: YourContract
+      startBlock: 1
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.6
+      language: wasm/assemblyscript
+      entities:
+        - Entity
+      abis:
+        - name: YourContract
+          file: ./abis/YourContract.json
+      eventHandlers:
+        - event: YourEvent(indexed address,uint256)
+          handler: handleYourEvent
+      file: ./src/mapping.ts
+```
+
+## Writing Mappings
+
+Create event handlers in `src/mapping.ts`:
+
+```typescript
+import { BigInt } from "@graphprotocol/graph-ts"
+import { YourEvent } from "../generated/YourContract/YourContract"
+import { Entity } from "../generated/schema"
+
+export function handleYourEvent(event: YourEvent): void {
+  let entity = new Entity(event.transaction.hash.toHex())
+  entity.count = event.params.count
+  entity.timestamp = event.block.timestamp
+  entity.save()
+}
+```
+
+## Deploying Your Subgraph
+
+1. Authenticate with the Graph hosted service:
+```bash
+graph auth --product hosted-service <YOUR_ACCESS_TOKEN>
+```
+
+2. Deploy your subgraph:
+```bash
+graph deploy --product hosted-service <GITHUB_USER>/<SUBGRAPH_NAME>
+```
+
+## Querying Data
+
+Once deployed, you can query your subgraph using GraphQL:
+
+```graphql
+{
+  entities(first: 5, orderBy: timestamp, orderDirection: desc) {
+    id
+    count
+    timestamp
+  }
+}
+```
+
+## Best Practices
+
+1. **Efficient Indexing**:
+   - Start from an appropriate block number
+   - Use efficient data structures
+   - Implement proper error handling
+
+2. **Performance Optimization**:
+   - Minimize the number of entity loads and saves
+   - Use derived fields when possible
+   - Implement proper caching strategies
+
+3. **Testing**:
+   - Write unit tests for your mappings
+   - Test with a local Graph Node before deployment
+   - Monitor indexing status after deployment
+
+## Troubleshooting
+
+Common issues and solutions:
+
+1. **Indexing Errors**:
+   - Check your start block number
+   - Verify contract addresses
+   - Ensure ABI compatibility
+
+2. **Performance Issues**:
+   - Optimize your entity relationships
+   - Review your mapping logic
+   - Monitor memory usage
+
+## Resources
+
+- [HashKey Chain Documentation](https://docs.hsk.xyz)
+- [The Graph Documentation](https://thegraph.com/docs)
+- [Developer Support](https://discord.gg/graphprotocol)
+
+## Conclusion
+
+Subgraph provides a powerful way to index and query blockchain data on HashKey Chain. By following this guide and best practices, you can build efficient and reliable data indexing solutions for your decentralized applications.

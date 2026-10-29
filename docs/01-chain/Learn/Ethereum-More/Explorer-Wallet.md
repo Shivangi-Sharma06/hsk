@@ -1,0 +1,362 @@
+<!-- Source: https://docs.hskchain.net/docs/Learn/Ethereum-More/Explorer-Wallet | Retrieved: 2026-10-29 | Language: English -->
+
+# 
+
+# Blockchain Explorer Guide: Understanding Key Metrics
+
+Blockchain explorers serve as windows into blockchain networks, providing real-time data about transactions, blocks, addresses, and network health. This guide focuses on how to navigate and interpret key metrics on Ethereum and HSKChain explorers.
+
+## Introduction to Blockchain Explorers
+
+Blockchain explorers are web applications that index and present blockchain data in user-friendly interfaces. They allow users to:
+
+* Track transactions and confirm their status
+* View block information and network activity
+* Investigate addresses and smart contracts
+* Monitor network health and performance metrics
+* Verify and interact with smart contracts
+
+## HSKChain Explorer
+
+### Getting Started with HSKChain Explorer
+
+Follow these simple steps to start using the HSKChain Explorer effectively:
+
+#### Step 1: Connect Wallet (Optional)
+
+While you can browse the explorer without connecting a wallet, connecting enables additional features:
+
+1. Navigate to [explorer.hsk.xyz](https://hashkey.blockscout.com/)
+2. Click the "Connect" button in the top-right corner
+3. Select your preferred wallet (MetaMask, WalletConnect, etc.)
+4. Approve the connection request in your wallet
+5. Once connected, your address will appear in the top-right corner
+
+Connecting your wallet allows you to:
+
+* View your personal transaction history
+* Monitor your token balances directly
+* Interact with verified smart contracts
+* Add addresses to your watchlist
+
+#### Step 2: Search for Blockchain Data
+
+The search bar is your primary tool for finding information:
+
+1. Click on the search bar at the top of the page
+2. Enter any of the following:
+   * Transaction hash (0x...)
+   * Address (0x...)
+   * Block number
+   * Token name or symbol
+3. Press Enter or click the search icon
+4. The explorer will direct you to the relevant information page
+
+#### Step 3: Explore Network Dashboard
+
+The homepage displays key network metrics:
+
+1. Review the summary statistics at the top:
+   * Total blocks
+   * Average block time
+   * Total transactions
+   * Wallet addresses count
+2. Scroll down to view recent blocks and transactions
+3. Check the Gas Tracker for current transaction fee estimates
+
+#### Step 4: Analyze Token Markets and Activity
+
+To explore tokens on the network:
+
+1. Click on the "Tokens" tab in the main navigation
+2. Browse the list of tokens sorted by market cap, volume, or holders
+3. Click on any token to view detailed information:
+   * Price history
+   * Total supply
+   * Holder distribution
+   * Transfer activity
+   * Contract details
+
+### Transaction Monitoring
+
+To investigate specific transactions:
+
+1. Enter the transaction hash in the search bar at the top
+2. Review transaction details including:
+   * Status (Success/Failed)
+   * Block confirmation information
+   * From/To addresses
+   * Value transferred
+   * Gas used and fee paid
+   * Timestamp
+
+The transaction view also shows execution traces and internal transactions for complex contract interactions.
+
+*Example of transaction details on HSKChain Explorer*
+
+### Address Analysis
+
+To analyze an address:
+
+1. Search for an address using the search bar
+2. View comprehensive address information:
+   * Balance history
+   * Transaction list
+   * Token holdings (ERC-20, ERC-721, ERC-1155)
+   * Contract interactions
+   * Analytics on transaction patterns
+
+For contract addresses, additional tabs show verified source code, contract interactions, and read/write functions.
+
+### Block Inspection
+
+To explore block details:
+
+1. Click on any block number or search for a specific block
+2. Review block information including:
+   * Block proposer/validator
+   * Timestamp
+   * Size and gas used
+   * Transactions included
+   * Block rewards
+
+This information helps understand network performance and validator activity.
+
+### Network Stats and Charts
+
+HSKChain Explorer provides visual analytics under the "Charts & Stats" section:
+
+1. Transaction volume over time
+2. Daily active addresses
+3. Gas price trends
+4. Block size and time statistics
+5. Token transfer volumes
+
+These charts help visualize network growth and identify trends or anomalies.
+
+*Network activity visualization on HSKChain Explorer*
+
+## OKLink HSKChain Explorer
+
+OKLink provides an alternative explorer for HSKChain at [oklink.com/hashkey](https://www.oklink.com/zh-hans/hashkey) with some additional metrics and different visualization options.
+
+### Getting Started with OKLink Explorer
+
+#### Step 1: Language and Account Setup
+
+1. Visit [OKLink HSKChain Explorer](https://www.oklink.com/zh-hans/hashkey)
+2. Select your preferred language from the dropdown in the footer
+3. (Optional) Click "Login" to create or access your OKLink account
+4. An account enables saved addresses, transaction alerts, and customized dashboards
+
+#### Step 2: Navigating the Interface
+
+The OKLink interface is organized into several main sections:
+
+1. Top navigation menu:
+
+   * Home
+   * Blockchain
+   * Tokens & NFT
+   * Developer
+   * More
+2. Review the prominent metrics display showing:
+
+   * 24h24h On-chain Transactions
+   * 24h24h On-chain Transaction Volume
+   * 24h24h Active Addresses
+   * TPS (Transactions Per Second)
+   * GasGas Price
+   * Block Height
+
+#### Step 3: Searching for Data
+
+1. Use the search bar at the top center of the page
+2. Enter transaction hash, address, or block number
+3. OKLink automatically detects the type of data you're searching for
+4. The explorer will display the relevant information page
+
+#### Step 4: Exploring Advanced Features
+
+OKLink offers several advanced analytics features:
+
+1. Cross-chain data comparison
+2. Address labeling and entity recognition
+3. Transaction flow visualization
+4. Token data analytics
+
+### Key Metrics Dashboard
+
+The OKLink dashboard shows several important metrics:
+
+1. **24h On-chain Transactions**: Total transactions in the past 24 hours
+2. **24h On-chain Transaction Volume**: Total HSK transferred in the past day
+3. **24h Active Addresses**: Number of unique addresses that participated in transactions
+4. **TPS (Transactions Per Second)**: Current network throughput
+5. **Gas Price**: Current gas price in Gwei
+6. **Block Height**: Latest block number
+
+*Key metrics on OKLink HSKChain Explorer*
+
+### Advanced Address Analytics
+
+OKLink provides enhanced address analytics:
+
+1. Address labels and entity recognition
+2. Fund flow visualization
+3. Address relationship graphs
+4. Historical balance charts
+
+These tools are particularly useful for analyzing complex transaction patterns or tracking specific funds.
+
+## Comparing Explorer Features
+
+| Feature | HSKChain Explorer | OKLink Explorer |
+| --- | --- | --- |
+| Contract Verification | ✓ | ✓ |
+| API Access | REST, GraphQL, RPC | REST API |
+| Token Tracking | ✓ | ✓ |
+| NFT Support | ✓ | ✓ |
+| Address Labeling | Limited | Extensive |
+| L1-L2 Bridge Monitoring | ✓ | Limited |
+| Transaction Visualization | Basic | Advanced |
+| Open Source | ✓ (Blockscout-based) | ✗ |
+
+## Wallet Integration with Blockchain Explorers
+
+### Setting Up Your Wallet for Explorer Interaction
+
+#### Step 1: Install a Compatible Wallet
+
+1. Choose a compatible wallet:
+
+   * [MetaMask](https://metamask.io/) (browser extension)
+   * [OKX Wallet](https://www.okx.com/web3) (browser extension or mobile)
+   * [Coinbase Wallet](https://www.coinbase.com/wallet) (browser extension or mobile)
+   * [WalletConnect](https://walletconnect.com/) compatible wallets
+2. Follow the wallet's installation and setup process:
+
+   * Create or import a wallet
+   * Securely store your recovery phrase
+   * Set a strong password
+
+#### Step 2: Configure the Network
+
+To interact with HSKChain:
+
+1. Open your wallet (e.g., MetaMask)
+2. Go to Network settings or "Add Network"
+3. Enter HSKChain network details:
+   * Network Name: HSKChain
+   * RPC URL: <https://hsk-mainnet.hashkey.com>
+   * Chain ID: 1719
+   * Currency Symbol: HSK
+   * Block Explorer URL: <https://hashkey.blockscout.com>
+
+#### Step 3: Connect Wallet to Explorer
+
+1. Navigate to the explorer (explorer.hsk.xyz)
+2. Click "Connect" button
+3. Select your wallet from the available options
+4. Approve the connection request in your wallet
+5. Your wallet address should now appear in the explorer interface
+
+### Using Wallet with Explorer
+
+#### Viewing Your Transactions
+
+1. After connecting your wallet, click on your address in the explorer
+2. The explorer will display all transactions associated with your address
+3. Use filters to sort by:
+   * Transaction type (transfers, contract interactions)
+   * Time period
+   * Status (success/failed)
+
+#### Verifying Transaction Details
+
+After sending a transaction:
+
+1. Copy the transaction hash from your wallet
+2. Paste it into the explorer's search bar
+3. The explorer shows the transaction status and details:
+   * Confirmation count
+   * Block inclusion
+   * Gas used and fees paid
+   * Contract interaction details (if applicable)
+
+#### Monitoring Token Balances
+
+1. Connect your wallet to the explorer
+2. Navigate to your address page
+3. View the "Tokens" tab to see:
+   * ERC-20 token balances
+   * NFT (ERC-721 and ERC-1155) holdings
+   * Historical token transfers
+
+Example workflow:
+
+```
+1. Send transaction from MetaMask
+2. Copy transaction hash
+3. Paste into explorer search bar
+4. Monitor confirmation status
+5. Verify gas used and final cost
+```
+
+## Developer-Focused Features
+
+Both explorers offer tools specifically useful for developers:
+
+### Contract Verification
+
+Verify your smart contract source code to make it publicly available and auditable:
+
+1. Navigate to "Verify Contract" in the explorer
+2. Input contract address and deployment parameters
+3. Upload source code and compiler settings
+4. Submit for verification
+
+Once verified, users can interact with your contract directly through the explorer interface.
+
+### API Integration
+
+Access blockchain data programmatically through explorer APIs:
+
+HSKChain Explorer offers:
+
+* REST API for basic data retrieval
+* GraphQL for complex queries
+* RPC API for node-like interaction
+
+Example API request to get address transactions:
+
+```javascript
+async function getAddressTransactions(address) {
+  const response = await fetch(
+    `https://hashkey.blockscout.com/api/v2/addresses/${address}/transactions`
+  );
+  return await response.json();
+}
+```
+
+## Security Considerations
+
+When using blockchain explorers, keep these security practices in mind:
+
+1. **Bookmark official explorer URLs** to avoid phishing sites
+2. **Never connect your wallet** to an explorer unless absolutely necessary
+3. **Verify contract source code** before interacting with smart contracts
+4. **Cross-check important transactions** across multiple explorers
+5. **Log out of connected wallets** after completing your session
+6. **Keep your wallet software updated** for security patches
+7. **Use read-only wallet connections** when only viewing data is needed
+
+## Conclusion
+
+Blockchain explorers are essential tools for transparency and analytics in blockchain networks. Both HSKChain Explorer and OKLink offer comprehensive views into network activity, transaction details, and address behaviors. Understanding how to interpret these metrics helps users make informed decisions and developers build better blockchain applications.
+
+For further assistance with specific metrics or explorer features, contact the HSKChain support team or join the community Discord server.
+
+[PreviousGas-Fee-Calculation](Gas-Fee-Calculation.md)
+
+[NextKnowledge](../../Knowledge.md)

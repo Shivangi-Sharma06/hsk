@@ -1,0 +1,104 @@
+<!-- Source: https://hashfans.io/docs/Learn/Ethereum-More/Introduction | Retrieved: 2026-10-29 | Language: English -->
+
+# Ethereum: The World Computer
+
+## Introduction to Ethereum
+
+*Shared source content: see [01-chain/Learn/Ethereum-More/Introduction.md](../../../01-chain/Learn/Ethereum-More/Introduction.md).*
+
+*Shared source content: see [01-chain/Learn/Ethereum-More/Introduction.md](../../../01-chain/Learn/Ethereum-More/Introduction.md).*
+
+## The Ethereum Whitepaper
+
+*Shared source content: see [01-chain/Learn/Ethereum-More/Introduction.md](../../../01-chain/Learn/Ethereum-More/Introduction.md).*
+
+> "A Next-Generation Smart Contract and Decentralized Application Platform."
+
+*Shared source content: see [01-chain/Learn/Ethereum-More/Introduction.md](../../../01-chain/Learn/Ethereum-More/Introduction.md).*
+
+Key concepts introduced in the whitepaper include:
+- **Smart Contracts**: Self-executing contracts with terms written in code
+- **Ethereum Virtual Machine (EVM)**: A runtime environment for executing smart contracts
+- **Ether (ETH)**: The native cryptocurrency used to power transactions on the network
+- **Gas**: A measurement unit for computational work on the network
+
+## Ethereum vs. Bitcoin: Key Differences
+
+*Shared source content: see [01-chain/Learn/Ethereum-More/Introduction.md](../../../01-chain/Learn/Ethereum-More/Introduction.md).*
+
+| Feature | Bitcoin | Ethereum |
+|---------|---------|----------|
+| Primary Purpose | Digital currency and store of value | Smart contract platform and decentralized computing |
+| Creation Date | 2009 | 2015 |
+| Founder | Satoshi Nakamoto (pseudonym) | Vitalik Buterin and co-founders |
+| Block Time | ~10 minutes | ~12-14 seconds |
+| Supply Model | Fixed supply (21 million) | No fixed supply cap (after the merge) |
+| Consensus Mechanism | Proof of Work | Proof of Stake (after the merge) |
+| Programmability | Limited script functionality | Fully programmable smart contracts |
+
+## Ethereum's Evolution and Major Upgrades
+
+Ethereum has undergone several significant upgrades since its launch:
+
+### Frontier (July 2015)
+The initial bare-bones version of Ethereum, allowing developers to mine ETH and build upon the network.
+
+### Homestead (March 2016)
+The first stable Ethereum release, introducing various protocol improvements.
+
+### DAO Fork (July 2016)
+A controversial hard fork that reversed the infamous DAO hack, leading to the creation of Ethereum Classic (ETC).
+
+### Metropolis (October 2017 and February 2019)
+Implemented in two phases (Byzantium and Constantinople), bringing enhanced security and scalability.
+
+### Istanbul (December 2019)
+Introduced improvements to gas costs and interoperability with Zcash.
+
+### Beacon Chain Launch (December 2020)
+The first step towards Ethereum 2.0, introducing Proof of Stake.
+
+### London Upgrade (August 2021)
+Implemented EIP-1559, changing the fee market and introducing a token burning mechanism.
+
+### The Merge (September 2022)
+Perhaps the most significant upgrade, transitioning Ethereum from Proof of Work to Proof of Stake, reducing energy consumption by ~99.95%.
+
+### Shanghai Upgrade (April 2023)
+Enabled staked ETH withdrawals and implemented various optimizations.
+
+### Cancun-Deneb (March 2024)
+Introduced proto-danksharding (EIP-4844) to reduce costs for rollups and additional improvements.
+
+## Understanding Layer 1 and Layer 2 Solutions
+
+### Layer 1: The Base Blockchain
+
+Ethereum is a [Layer 1](../../Knowledge/layer-1.md) blockchain, meaning it's a base blockchain protocol that validates and finalizes transactions on its own network. As the foundation of the ecosystem, Ethereum provides:
+
+- Security through its consensus mechanism
+- Decentralization via thousands of nodes worldwide
+- Native token (ETH) for transactions and network operation
+- Smart contract functionality
+
+*Shared source content: see [01-chain/Learn/Ethereum-More/Introduction.md](../../../01-chain/Learn/Ethereum-More/Introduction.md).*
+
+### Layer 2: Scaling Solutions
+
+To address scalability limitations, [Layer 2](../../Knowledge/layer-2.md) solutions have been developed. These are protocols built on top of Ethereum that handle transactions off the main chain while inheriting its security. Major Layer 2 solutions include:
+
+- **Rollups (Optimistic and Zero-Knowledge)**: Process transactions off-chain and post compressed data to Ethereum
+- **State Channels**: Enable users to conduct transactions off-chain and only settle the final state on Ethereum
+- **Plasma Chains**: Create child chains that handle specific applications with their own consensus mechanisms
+- **Validiums**: Similar to rollups but store data off-chain for greater scalability
+
+## Ethereum and Hashkey Chain
+
+Hashkey Chain is a Layer 2 scaling solution built on Ethereum's foundation. As an Ethereum-compatible blockchain, it offers:
+
+1. **Lower Transaction Costs**: By processing transactions off the main Ethereum chain
+2. **Higher Throughput**: Capable of handling more transactions per second
+3. **Ethereum Compatibility**: Supporting Ethereum's development tools and smart contracts
+4. **Bridge Functionality**: Allowing assets to move between Ethereum and Hashkey Chain
+
+Hashkey Chain leverages Ethereum's security while addressing its scalability limitations, making it particularly suitable for decentralized finance (DeFi) applications, NFT marketplaces, and enterprise solutions.

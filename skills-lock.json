@@ -1,0 +1,29 @@
+{
+  "version": 1,
+  "skills": {
+    "evm-testing": {
+      "source": "justalab-co/cryptoskills",
+      "sourceType": "github",
+      "skillPath": "skills/evm-testing/SKILL.md",
+      "computedHash": "08d8449abc1c8c07afee8ab86200e435a4db0a4809918b94017febac3ab345e1"
+    },
+    "solidity-security": {
+      "source": "justalab-co/cryptoskills",
+      "sourceType": "github",
+      "skillPath": "skills/solidity-security/SKILL.md",
+      "computedHash": "1d4b09f5d0078958547eff2c9ee59698303de868fcc3f62eced2122de7cc33cb"
+    },
+    "viem": {
+      "source": "justalab-co/cryptoskills",
+      "sourceType": "github",
+      "skillPath": "skills/viem/SKILL.md",
+      "computedHash": "040f5c4d3cdda013f05942b75d4b46fbe3d55bc3bcceb4cf4bf79c92b9dea3d0"
+    },
+    "wagmi": {
+      "source": "justalab-co/cryptoskills",
+      "sourceType": "github",
+      "skillPath": "skills/wagmi/SKILL.md",
+      "computedHash": "96f8da1c15f78ce3258fd895b76f6e8dd4ebe4353ecfec5c762c7210403dae8a"
+    }
+  }
+}

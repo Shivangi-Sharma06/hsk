@@ -1,0 +1,73 @@
+<!-- Source: https://hashfans.io/docs/Knowledge/poa | Retrieved: 2026-10-29 | Language: English -->
+
+# Proof of Authority (PoA)
+
+*Shared source content: see [01-chain/Knowledge/poa.md](../../01-chain/Knowledge/poa.md).*
+
+## Core Principles
+
+- **Identity-Based Validation**: Validators are known entities with verified identities
+- **Reputation at Stake**: Validators risk their reputation and future authority by acting maliciously
+- **Limited Validator Set**: A small group of trusted validators manages the network
+- **Permissioned Network**: Validators must be approved to participate in consensus
+- **No Economic Competition**: Block creation rights are assigned based on a schedule, not competition
+
+## How PoA Works
+
+### Validator Selection and Management
+
+*Shared source content: see [01-chain/Knowledge/poa.md](../../01-chain/Knowledge/poa.md).*
+
+### Block Production Process
+
+*Shared source content: see [01-chain/Knowledge/poa.md](../../01-chain/Knowledge/poa.md).*
+
+## Advantages of PoA
+
+- **High Performance**: Very fast block times (often seconds)
+- **Energy Efficiency**: No computational puzzles to solve
+- **Predictable Block Times**: Regular and reliable block production
+- **No Forking**: Reduced risk of chain reorganizations
+- **High Throughput**: Can process hundreds or thousands of transactions per second
+- **Accountability**: Validators have known identities and are legally accountable
+
+## Use Cases and Applications
+
+- **Private or Consortium Blockchains**: Enterprise networks with known participants
+- **Sidechains**: Secondary chains connected to public networks like Ethereum
+- **Testnets**: Testing environments for blockchain applications
+- **Infrastructure Networks**: Chains designed for specific infrastructure services
+- **Governance Networks**: Systems focused on voting and governance operations
+
+## PoA Implementations
+
+### Ethereum Testnets
+
+- **Goerli**: Cross-client Ethereum testnet with 5-15 second block times
+- **Sepolia**: Ethereum testnet designed for the Merge testing
+
+### Enterprise Solutions
+
+- **Quorum**: JPMorgan's enterprise version of Ethereum
+- **xDai Chain (now Gnosis Chain)**: Stable currency focused sidechain
+- **VeChain**: Supply chain focused blockchain with Authority Masternodes
+- **Polygon PoS**: Uses a form of PoA combined with staking mechanisms
+
+## Limitations and Challenges
+
+- **Centralization**: Small set of validators creates centralization risks
+- **Trust Requirement**: Users must trust the validator selection process
+- **Limited Censorship Resistance**: Validators could potentially collude to censor transactions
+- **Governance Complexity**: Selecting and replacing validators requires careful governance
+- **Regulatory Concerns**: Known validators may be subject to regulatory pressures
+
+## Evolution and Hybrid Models
+
+To address limitations, several variations and hybrid models have emerged:
+
+- **PoA with Voting**: Allowing token holders to vote for validators
+- **PoA with Stake**: Requiring validators to lock up tokens as economic security
+- **Rotating PoA**: Changing validator sets regularly to increase decentralization
+- **Multi-layered Validation**: Using different validation mechanisms for different network functions
+
+*Shared source content: see [01-chain/Knowledge/poa.md](../../01-chain/Knowledge/poa.md).*

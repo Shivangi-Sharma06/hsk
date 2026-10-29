@@ -1,0 +1,170 @@
+<!-- Source: https://hashfans.io/docs/Learn/Ethereum-More/Gas-Fee-Calculation | Retrieved: 2026-10-29 | Language: English -->
+
+# Ethereum Gas Fee Calculation
+
+Gas fees are a fundamental aspect of the Ethereum network, serving as the mechanism that prices computational resources and helps secure the network against spam and denial-of-service attacks. This document explores how gas fees work in Ethereum, their evolution over time, and how HashKey Chain implements its fee structure.
+
+## Gas Fundamentals
+
+*Shared source content: see [01-chain/Learn/Ethereum-More/Gas-Fee-Calculation.md](../../../01-chain/Learn/Ethereum-More/Gas-Fee-Calculation.md).*
+
+### Key Concepts
+
+- **Gas Units**: The amount of computational work required for operations
+- **Gas Price**: The price per unit of gas, denominated in gwei (1 gwei = 10^-9 ETH)
+- **Gas Limit**: Maximum gas a user is willing to consume for a transaction
+- **Transaction Fee**: `Gas Used × Gas Price`
+
+## Historical Evolution of Ethereum's Fee Model
+
+*Shared source content: see [01-chain/Learn/Ethereum-More/Gas-Fee-Calculation.md](../../../01-chain/Learn/Ethereum-More/Gas-Fee-Calculation.md).*
+
+### Legacy Fee Model (Pre-EIP-1559)
+
+Prior to August 2021, Ethereum used a simple auction-based model:
+
+```
+Transaction Fee = Gas Used × Gas Price (set by user)
+```
+
+**Characteristics:**
+- Users specified their gas price, essentially bidding for inclusion in blocks
+- Miners prioritized transactions with higher gas prices
+- Led to unpredictable fees and "gas wars" during network congestion
+- Users struggled to estimate appropriate gas prices
+
+**Technical Implementation:**
+```solidity
+// Legacy transaction structure (simplified)
+struct LegacyTransaction {
+    uint nonce;
+    uint gasPrice;     // User-specified gas price in wei
+    uint gasLimit;     // Maximum gas user is willing to pay
+    address to;
+    uint value;
+    bytes data;
+    // v, r, s signature values
+}
+
+// Fee calculation
+uint transactionFee = gasUsed * gasPrice;
+```
+
+### EIP-1559 Fee Model (London Upgrade, August 2021)
+
+*Shared source content: see [01-chain/Learn/Ethereum-More/Gas-Fee-Calculation.md](../../../01-chain/Learn/Ethereum-More/Gas-Fee-Calculation.md).*
+
+```
+Transaction Fee = (Base Fee + Priority Fee) × Gas Used
+```
+
+**Components:**
+- **Base Fee**: Algorithmically determined fee that adjusts based on network demand
+  - Automatically changes by up to 12.5% per block based on how full the previous block was
+  - Target is 50% full blocks (15M gas)
+  - Gets burned (removed from supply) rather than paid to miners/validators
+- **Priority Fee (Tip)**: Optional fee paid directly to validators as incentive for inclusion
+
+**Technical Implementation:**
+```solidity
+// EIP-1559 transaction structure (simplified)
+struct EIP1559Transaction {
+    uint chainId;
+    uint nonce;
+    uint maxPriorityFeePerGas;  // Maximum tip to validator
+    uint maxFeePerGas;          // Maximum total fee willing to pay
+    uint gasLimit;
+    address to;
+    uint value;
+    bytes data;
+    // access list, signature values
+}
+
+// Fee calculation (in protocol)
+uint baseFee = getCurrentBlockBaseFee();  // Determined by protocol
+uint priorityFee = min(maxPriorityFeePerGas, maxFeePerGas - baseFee);
+uint actualFeePerGas = baseFee + priorityFee;
+uint transactionFee = gasUsed * actualFeePerGas;
+uint burnedAmount = gasUsed * baseFee;
+uint validatorPayment = gasUsed * priorityFee;
+```
+
+**Benefits of EIP-1559:**
+- More predictable fees (base fee provides clear guidance)
+- Better user experience (less guesswork in fee estimation)
+- Economic improvements (ETH burning mechanism creates deflationary pressure)
+- Reduced fee volatility
+
+### Post-Merge Fee Considerations (2022-Present)
+
+After Ethereum's transition to Proof of Stake in September 2022 ("The Merge"):
+- Validators replaced miners as transaction processors
+- The EIP-1559 mechanism remained intact
+- Priority fees go to validators instead of miners
+- Block production became more consistent (exactly one block every ~12 seconds)
+
+## Gas Calculation Details
+
+### Gas Cost of Operations
+
+Every operation in the Ethereum Virtual Machine (EVM) has a predetermined gas cost:
+
+| Operation | Gas Cost | Description |
+|-----------|----------|-------------|
+| `ADD`, `SUB` | 3 | Simple arithmetic |
+| `MUL`, `DIV` | 5 | More complex arithmetic |
+| `SSTORE` (0→1) | 20,000 | Storing a new value in state |
+| `SSTORE` (modify) | 5,000 | Modifying an existing state value |
+| `CALL` | 700+ | Calling another contract |
+| `CREATE` | 32,000+ | Creating a new contract |
+
+*Shared source content: see [01-chain/Learn/Ethereum-More/Gas-Fee-Calculation.md](../../../01-chain/Learn/Ethereum-More/Gas-Fee-Calculation.md).*
+
+### Gas Estimation
+
+Ethereum nodes provide a `eth_estimateGas` RPC method to estimate gas requirements for transactions:
+
+```javascript
+// Web3.js example of gas estimation
+const gasEstimate = await web3.eth.estimateGas({
+    from: myAddress,
+    to: contractAddress,
+    data: contractFunction.encodeABI()
+});
+
+// Add buffer for safety (e.g., 20%)
+const gasLimitWithBuffer = Math.floor(gasEstimate * 1.2);
+```
+
+## HashKey Chain's Fee Model
+
+[HashKey Chain](../../Build-on-HashKey-Chain/Fee.md) employs a dual-fee structure that builds upon Ethereum's model while optimizing for its Layer 2 architecture.
+
+### Dual-Fee Structure
+
+Each transaction on HashKey Chain includes two distinct fee components:
+
+```
+Total Fee = L2 Execution Fee + L1 Security Fee
+```
+
+**L2 Execution Fee:**
+- Covers computational resources on HashKey Chain
+- Similar to Ethereum's gas model
+- `L2 Execution Fee = Gas Used × L2 Gas Price`
+- Typically more stable and predictable
+
+**L1 Security Fee:**
+- Represents cost of posting data to Ethereum mainnet
+- Fluctuates based on Ethereum gas prices
+- `L1 Security Fee = Data Size × L1 Gas Price × L1 Gas Per Byte`
+- Often constitutes the larger portion of the total cost
+
+### Key Differences from Ethereum
+
+1. **Data Compression**: HashKey Chain employs advanced data compression techniques to minimize L1 security fees
+2. **Fee Stability**: The L2 execution component provides more stable fees than Ethereum mainnet
+3. **Economic Efficiency**: Overall costs are significantly lower than equivalent transactions on Ethereum L1
+4. **Predictability**: The separation of L1 and L2 fees provides clearer cost expectations
+
+For detailed information on HashKey Chain's fee structure, optimization techniques, and current fee rates, refer to the [HashKey Chain Transaction Fee documentation](../../Build-on-HashKey-Chain/Fee.md).

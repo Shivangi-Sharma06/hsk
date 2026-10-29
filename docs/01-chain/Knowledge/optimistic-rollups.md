@@ -1,0 +1,100 @@
+<!-- Source: https://docs.hskchain.net/docs/Knowledge/optimistic-rollups | Retrieved: 2026-10-29 | Language: English -->
+
+# 
+
+# Optimistic Rollups
+
+Optimistic Rollups are a Layer 2 scaling solution for blockchains (primarily Ethereum) that execute transactions off-chain but post transaction data on-chain, using a security model based on fraud proofs. They significantly increase throughput and reduce gas costs while inheriting the security guarantees of the underlying Layer 1 blockchain.
+
+## Core Mechanism
+
+Optimistic Rollups operate on a simple principle: assume transactions are valid by default and only verify them if challenged. This "optimistic" approach allows for significantly higher transaction throughput compared to processing all transactions directly on Layer 1.
+
+## How Optimistic Rollups Work
+
+### Transaction Processing Flow
+
+1. **Transaction Submission**: Users submit transactions to the rollup chain
+2. **Batch Aggregation**: A sequencer (block producer) collects and orders transactions into batches
+3. **State Computation**: The sequencer processes transactions and computes the new state
+4. **Data Publication**: Transaction data is posted to Layer 1 as calldata
+5. **State Updates**: The sequencer submits state updates including a bond (stake)
+6. **Challenge Period**: A window of time (typically 1-7 days) where anyone can challenge invalid state transitions
+7. **Finalization**: If no successful challenges occur during the challenge period, the state update is considered final
+
+### Fraud Proof System
+
+When a validator suspects a fraudulent state transition:
+
+1. **Challenge Initiation**: The challenger posts a bond and initiates a dispute
+2. **Interactive Proving**: The original sequencer must respond to the challenge
+3. **Verification Game**: A binary search identifies the specific computation step in question
+4. **On-chain Verification**: The disputed step is re-executed on Layer 1
+5. **Resolution**: If fraud is proven, the challenger receives a reward from the sequencer's bond
+
+## Technical Components
+
+### Smart Contracts
+
+* **Bridge Contract**: Manages deposits and withdrawals between L1 and L2
+* **State Commitment Chain**: Stores sequential state roots (Merkle roots)
+* **Canonical Transaction Chain**: Maintains the official transaction sequence
+* **Fraud Proof Contract**: Handles verification of challenges
+
+### Data Availability
+
+Optimistic Rollups post all transaction data on-chain as calldata, ensuring that anyone can:
+
+* Verify the current state
+* Reconstruct the state history
+* Challenge invalid state transitions
+* Exit the system trustlessly if needed
+
+## Advantages
+
+* **High Throughput**: 100-2000 transactions per second (TPS) compared to Ethereum's ~15 TPS
+* **Cost Efficiency**: 3-8x lower gas fees than Layer 1
+* **EVM Compatibility**: Full support for Ethereum smart contracts and tooling
+* **Strong Security**: Inherits the security of the underlying Layer 1
+* **Trustless Operation**: No additional trust assumptions beyond the base layer
+* **Censorship Resistance**: Ability to force transaction inclusion through Layer 1
+
+## Limitations
+
+* **Withdrawal Delay**: Users must wait through the challenge period (typically 1-7 days) to withdraw funds
+* **MEV Vulnerability**: Sequencers can potentially extract value through transaction ordering
+* **Centralization Risks**: Current implementations often rely on a single sequencer
+* **Liquidity Fragmentation**: Assets locked across multiple rollups create liquidity challenges
+* **Fraud Proof Complexity**: Sophisticated mechanism requiring active validators to ensure security
+
+## Major Implementations
+
+### Optimism
+
+* Founded by the team behind Plasma research
+* Uses OVM (Optimistic Virtual Machine)
+* Focuses on EVM equivalence for seamless compatibility
+* Decentralized sequencer roadmap in progress
+* Governed by the Optimism Collective
+
+### Arbitrum
+
+* Developed by Offchain Labs
+* Uses AVM (Arbitrum Virtual Machine)
+* Employs multi-round interactive fraud proofs
+* Supports Nitro technology for improved performance
+* More complex fraud proof system with multiple validators
+
+## Future Developments
+
+The Optimistic Rollup ecosystem continues to evolve with:
+
+* **Decentralized Sequencing**: Moving from single sequencers to distributed sequencer networks
+* **Shortened Challenge Periods**: Research into reducing withdrawal times
+* **Cross-Rollup Communication**: Protocols for interoperability between different rollups
+* **ZK-Hybrid Systems**: Combining aspects of Optimistic and ZK Rollups
+* **Aggregated Proofs**: Validating multiple rollups with a single proof system
+
+Optimistic Rollups represent a pragmatic approach to blockchain scaling that balances security, compatibility, and performance improvements, making them suitable for general-purpose applications requiring Ethereum's full programmability.
+
+[NextAbout HSKChain](../About-HashKey-Chain.md)

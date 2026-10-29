@@ -1,0 +1,33 @@
+<!-- Source: https://hashfans.io/docs/Learn/Bitcoin-and-Blockchain | Retrieved: 2026-10-29 | Language: English -->
+
+# Bitcoin and blockchain
+
+## Bitcoin and blockchain
+Bitcoin was introduced in 2008 by an individual or group under the pseudonym Satoshi Nakamoto through the whitepaper Bitcoin: [A Peer-to-Peer Electronic Cash System (Bitcoin Whitepaper)](https://bitcoin.org/bitcoin.pdf). Prompted by the 2008 financial crisis, Nakamoto envisioned a decentralized digital currency that enables peer-to-peer transactions without intermediaries like banks. Bitcoin's design emphasizes trustlessness, transparency, and resistance to censorship, offering an alternative to centralized financial systems.
+
+*Shared source content: see [01-chain/Learn/Bitcoin-and-Blockchain.md](../../01-chain/Learn/Bitcoin-and-Blockchain.md).*
+
+## How Bitcoin Works
+
+### Proof of Work (PoW)
+Miners solve complex mathematical puzzles to validate transactions and add blocks to the blockchain, earning bitcoins and transaction fees. This process secures the network but is energy-intensive.
+
+### Block Structure
+Each block includes a header (with the previous block's hash, timestamp, Merkle root, and nonce) and a list of transactions.
+
+### Transaction Verification
+Nodes verify transactions by checking digital signatures and ensuring inputs are unspent, preventing double-spending.
+
+## Key Milestones in Bitcoin Development
+
+- **2009**: Bitcoin network launched with the mining of the genesis block
+- **2010**: First real-world Bitcoin transaction (10,000 BTC for two pizzas)
+- **2011**: Bitcoin reaches parity with the US dollar
+- **2013**: Bitcoin price surges past $1,000 for the first time
+- **2014**: Major exchanges like Mt. Gox collapse, testing Bitcoin's resilience
+- **2017**: Bitcoin experiences a massive bull run, reaching nearly $20,000
+- **2020**: Institutional adoption begins with companies like MicroStrategy and Square investing in Bitcoin
+- **2021**: El Salvador adopts Bitcoin as legal tender, the first country to do so
+- **2022**: Bitcoin withstands market turmoil amidst global economic uncertainty
+- **2023**: Continued institutional adoption and infrastructure development
+- **2024**: Spot Bitcoin ETFs approved in the United States

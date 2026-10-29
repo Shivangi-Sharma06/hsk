@@ -1,0 +1,21 @@
+<!-- Source: https://docs.hskchain.net/docs/About-HashKey-Chain | Retrieved: 2026-10-29 | Language: English -->
+
+# 
+
+# About HSKChain
+
+HSKChain is the preferred blockchain for financial institutions and RWA tokenization, dedicated to promoting compliant and scalable Onchain Finance. As a compliance-friendly blockchain infrastructure, HSKChain provides a secure and transparent on-chain environment for institutions.
+
+### Institution-Ready Features
+
+Experience institutional-grade infrastructure with built-in compliance tools. Access advanced features including automated compliance checks, institutional custody solutions, and seamless integration with traditional banking rails, all while maintaining competitive transaction fees.
+
+### Enterprise Security
+
+HSKChain implements multiple layers of security measures, including industry-leading custody solutions, robust risk management systems, and regular security audits. Our infrastructure is designed to meet the stringent requirements of financial institutions and regulatory bodies.
+
+### Powered by HashKey Group
+
+Leverage HashKey Group's comprehensive digital asset ecosystem, including licensed exchange services, institutional custody, and established relationships with traditional financial institutions. Benefit from seamless fiat on/off ramps and access to a growing network of compliant virtual asset services.
+
+[NextDeveloper QuickStart](Developer-QuickStart.md)

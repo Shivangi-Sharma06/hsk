@@ -1,0 +1,144 @@
+<!-- Source: https://hashfans.io/docs/Build-on-HashKey-Chain/RPC-Node-Provider | Retrieved: 2026-10-29 | Language: English -->
+
+## Running Your Own Node
+
+Self-hosting a HashKey Chain node gives you improved reliability, privacy, and control over your blockchain interactions. The following steps will help you set up a full node using Docker.
+
+### Prerequisites
+
+- Git
+- Docker and Docker Compose
+- OpenSSL
+- Access to an Ethereum L1 RPC endpoint
+- Access to an Ethereum L1 Beacon endpoint
+- Minimum system requirements:
+  - 16GB RAM
+  - 4 CPU cores
+  - 1TB SSD storage (for archive node)
+  - 500GB SSD storage (for full node)
+
+### Setup Instructions
+
+1. **Clone the repository and checkout the appropriate version**
+
+```bash
+git clone https://github.com/HashKeyChain/fullnode-sync
+cd fullnode-sync
+```
+
+2. **Generate JWT secret**
+
+This JWT secret is used for secure communication between the execution and consensus layers.
+
+```bash
+openssl rand -hex 32 > ./jwt/jwt.txt
+```
+
+3. **Configure environment variables**
+
+*Shared source content: see [01-chain/Build-on-HashKey-Chain/RPC-Node-Provider.md](../../01-chain/Build-on-HashKey-Chain/RPC-Node-Provider.md).*
+
+4. **Start the node**
+
+```bash
+docker compose up -d
+```
+
+5. **Monitor the node**
+
+```bash
+docker compose logs -f
+```
+
+## Configuration Templates
+
+### Mainnet Configuration
+
+Create a `.env` file with the following content for HashKey Chain Mainnet, replacing `<L1_RPC_URL>` and `<BEACON_URL>` with your Ethereum mainnet endpoints:
+
+```bash
+# geth image
+GETH_IMAGE=us-docker.pkg.dev/oplabs-tools-artifacts/images/op-geth:v1.101503.4
+# op-l2 geth bootnodes
+GETH_STATICNODES='[
+    "enode://e3d83751cba1f5fd806a73e9701baaa93eb729474eb6c246050e76f9cde32915d4904e1fa12be4196ad7296aba61d4ffebfb7a9c5eeff2b9578e0d7a55cc5ed5@hashkey-mainnet-bootnodes.altlayer.network:31111",
+    "enode://b3714bf5e75760fcbb4de393b75bbcf046be7aa6fb47bd928c4ad6405717a5e67cb01a31dc820ce6b51cfb6c8268ec6c1166fdb2a66f9c92ea67f2fdfdf130fc@hashkey-mainnet-bootnodes.altlayer.network:31113",
+    "enode://6ad0903b679bed251393813042f2452f55ec4e6f120347d412c203072e58bb2e3c1d68247eba25a89b920995bed3b043819d49577a8c1fe4f1c0d762d7d6763a@hashkey-mainnet-bootnodes.altlayer.network:31115",
+    "enode://17162151981152707b855e1e67ab9027dcad7af7a2dbcfa40352c6940f1a977f490b2522986736a8c20327abd5f50afd39f23031b3b103d99c0c03c4449bd172@hashkey-mainnet-bootnodes.altlayer.network:31117",
+
+]'
+# genesis file url link
+GENESIS_URL="https://operator-public.s3.us-west-2.amazonaws.com/hashkeychain/mainnet/genesis.json"
+# sync mode(full or snap)
+GETH_SYNC_MODE=full
+# gc mode(archive or full)
+GC_MODE=archive
+# geth http api
+HTTP_API="web3,eth,net,engine"
+# geth ws api
+WS_API="web3,eth,net,engine"
+# tx forward endpoint
+SEQUENCER_HTTP=https://mainnet.hsk.xyz
+
+# OP_NODE_LOG_LEVEL=Debug
+# l1 rpc url
+# node image
+NODE_IMAGE=us-docker.pkg.dev/oplabs-tools-artifacts/images/op-node:v1.13.2
+
+L1_RPC=
+# l1 rpc kind(standard/basic/quicknode/alchemy/erigon)
+# https://docs.optimism.io/builders/node-operators/tutorials/node-from-docker
+L1_RPC_KIND=standard
+
+# l1 beacon url
+L1_BEACON=
+
+# node libp2p bootnodes dns/ip4
+P2P_STATIC="/dns/hashkey-mainnet-bootnodes.altlayer.network/tcp/31112/p2p/16Uiu2HAm1UX8Lx4XKnHXncKCw5Q4r6jsajKDEukHk9S9NXuroVKY,/dns/hashkey-mainnet-bootnodes.altlayer.network/tcp/31114/p2p/16Uiu2HAm2PzcWR3pgBkCSUC8Co6WsKHhyyxJysQqzeZpHoX2RaAf,/dns/hashkey-mainnet-bootnodes.altlayer.network/tcp/31116/p2p/16Uiu2HAm6s2pY65dcXi8zM4EfD7oCP4o64C6a8XbxwgLU1q6WAUe,/dns/hashkey-mainnet-bootnodes.altlayer.network/tcp/31118/p2p/16Uiu2HAmQEAZhJTPSdrJpH2NqZ5X368XPXGq68XxL1r8wQamdbwQ"
+# rollup config file url link
+ROLLUP_CONFIG_URL="https://operator-public.s3.us-west-2.amazonaws.com/hashkeychain/mainnet/rollup.json"
+
+```
+
+### Testnet Configuration
+
+Create a `.env` file with the following content for HashKey Chain Testnet, replacing `<BEACON_URL>` with your Ethereum Sepolia testnet beacon endpoint:
+
+```bash
+# geth image
+GETH_IMAGE=us-docker.pkg.dev/oplabs-tools-artifacts/images/op-geth:v1.101503.4
+# op-l2 geth bootnodes
+GETH_STATICNODES='[
+    "enode://f26759caecdec0ae9d04f523a4ae6a7c562e47f89289f9a520c56f97da9c64cf386441df7f2e992b153a66e8988dcbd3280064db700002e9c14140913004cc52@testnet-bootnodes.hsk.xyz:31289",
+    "enode://72c77ff6d8dac333d283ac2a2522452045bc292d156e4cb4c14d3ef804db77d0c11f7a0bacd507d7eaaa371a7b32cb47369c799620d245630ee137a58d19e893@testnet-bootnodes.hsk.xyz:30109"
+]'
+# genesis file url link
+GENESIS_URL="https://hashkeychain.s3.ap-southeast-1.amazonaws.com/testnet/genesis.json"
+# sync mode(full or snap)
+GETH_SYNC_MODE=full
+# gc mode(archive or full)
+GC_MODE=archive
+# geth http api
+HTTP_API="web3,eth,net,engine"
+# geth ws api
+WS_API="web3,eth,net,engine"
+# tx forward endpoint
+SEQUENCER_HTTP=https://testnet.hsk.xyz
+
+# OP_NODE_LOG_LEVEL=Debug
+# l1 rpc url
+# node image
+NODE_IMAGE=us-docker.pkg.dev/oplabs-tools-artifacts/images/op-node:v1.13.2
+
+L1_RPC=
+# l1 rpc kind(standard/basic/quicknode/alchemy/erigon)
+# https://docs.optimism.io/builders/node-operators/tutorials/node-from-docker
+L1_RPC_KIND=standard
+
+# l1 beacon url
+L1_BEACON=
+# node libp2p bootnodes dns/ip4
+P2P_STATIC='/dns/testnet-bootnodes.hsk.xyz/tcp/31301/p2p/16Uiu2HAm2tAbwcFYMnXNvVmhacKbE1gz1oMbdrxpUNEUrTBp1fvZ,/dns/testnet-bootnodes.hsk.xyz/tcp/32343/p2p/16Uiu2HAmDKkBkmQNBRe1yXZPtRkJUWmafLgmj6Y84w2AUa3Qgp6N'
+# rollup config file url link
+ROLLUP_CONFIG_URL="https://hashkeychain.s3.ap-southeast-1.amazonaws.com/testnet/rollup.json"
+```
