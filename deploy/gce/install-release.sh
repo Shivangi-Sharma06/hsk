@@ -55,6 +55,8 @@ install -m 0644 "$release"/deploy/gce/Caddyfile /etc/caddy/Caddyfile
 SITE_ADDRESS="https://$address" SITE_HOST="$address" ACME_EMAIL="$email" caddy validate --config /etc/caddy/Caddyfile --adapter caddyfile
 systemctl daemon-reload
 systemd-analyze verify /etc/systemd/system/proofbid-*.service /etc/systemd/system/proofbid-backup.timer
-systemctl enable --now proofbid-vendors.service proofbid-api.service proofbid-backup.timer caddy.service
+systemctl enable --now proofbid-vendors.service proofbid-api.service proofbid-backup.timer
+systemctl enable caddy.service
+systemctl restart caddy.service
 printf '%s\n' "$revision" > /etc/proofbid/revision
 echo "Deployed $revision. HSP and real payments remain disabled."
