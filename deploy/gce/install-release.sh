@@ -48,10 +48,11 @@ install -d /etc/systemd/system/caddy.service.d
 cat > /etc/systemd/system/caddy.service.d/proofbid.conf <<CONFIG
 [Service]
 Environment=SITE_ADDRESS=https://$address
+Environment=SITE_HOST=$address
 Environment=ACME_EMAIL=$email
 CONFIG
 install -m 0644 "$release"/deploy/gce/Caddyfile /etc/caddy/Caddyfile
-SITE_ADDRESS="https://$address" ACME_EMAIL="$email" caddy validate --config /etc/caddy/Caddyfile --adapter caddyfile
+SITE_ADDRESS="https://$address" SITE_HOST="$address" ACME_EMAIL="$email" caddy validate --config /etc/caddy/Caddyfile --adapter caddyfile
 systemctl daemon-reload
 systemd-analyze verify /etc/systemd/system/proofbid-*.service /etc/systemd/system/proofbid-backup.timer
 systemctl enable --now proofbid-vendors.service proofbid-api.service proofbid-backup.timer caddy.service

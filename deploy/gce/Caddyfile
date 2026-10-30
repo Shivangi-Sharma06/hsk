@@ -1,5 +1,6 @@
 {
 	email {$ACME_EMAIL}
+	default_sni {$SITE_HOST}
 	admin localhost:2019
 }
 

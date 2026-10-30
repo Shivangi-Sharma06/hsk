@@ -19,7 +19,7 @@ cd /opt/proofbid/current
 restart
 trap - EXIT
 tar -C "$directory" -czf "$directory.tar.gz" .
-gcloud storage cp "$directory.tar.gz" "gs://$BACKUP_BUCKET/sqlite/$stamp.tar.gz" --quiet
+python3 deploy/gce/upload-backup.py "$BACKUP_BUCKET" "$directory.tar.gz" "sqlite/$stamp.tar.gz"
 # Only prune coordinated backups after an off-VM upload succeeds.
 find /srv/proofbid-data/backups -mindepth 1 -maxdepth 1 -mtime +7 -type f -name '*.tar.gz' -delete
 find /srv/proofbid-data/backups -mindepth 1 -maxdepth 1 -mtime +7 -type d -name '20*T*Z' -exec rm -r -- {} +

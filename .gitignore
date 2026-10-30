@@ -50,3 +50,7 @@ Thumbs.db
 *.sqlite-shm
 test-results/
 playwright-report/
+
+# Python deployment tooling
+__pycache__/
+*.py[cod]
