@@ -1,0 +1,11 @@
+[Unit]
+Description=Coordinated ProofBid database backup to Cloud Storage
+After=network-online.target
+Wants=network-online.target
+RequiresMountsFor=/srv/proofbid-data
+
+[Service]
+Type=oneshot
+ExecStart=/opt/proofbid/current/deploy/gce/backup.sh
+UMask=0077
+TimeoutStartSec=300

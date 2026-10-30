@@ -1,0 +1,26 @@
+[Unit]
+Description=ProofBid receiving agents
+After=network-online.target
+Wants=network-online.target
+RequiresMountsFor=/srv/proofbid-data
+
+[Service]
+User=proofbid
+Group=proofbid
+WorkingDirectory=/opt/proofbid/current
+EnvironmentFile=/etc/proofbid/app.env
+Environment=PATH=/opt/node/bin:/usr/local/bin:/usr/bin:/bin
+ExecStart=/opt/node/bin/node --import tsx apps/vendors/src/server.ts
+Restart=on-failure
+RestartSec=5
+TimeoutStopSec=30
+UMask=0077
+NoNewPrivileges=true
+PrivateTmp=true
+ProtectSystem=strict
+ProtectHome=true
+ReadWritePaths=/srv/proofbid-data/app /var/lib/proofbid
+LimitNOFILE=8192
+
+[Install]
+WantedBy=multi-user.target

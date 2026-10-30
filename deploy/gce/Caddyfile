@@ -1,0 +1,16 @@
+{
+	email {$ACME_EMAIL}
+	admin localhost:2019
+}
+
+{$SITE_ADDRESS} {
+	tls {
+		issuer acme {
+			dir https://acme-v02.api.letsencrypt.org/directory
+			profile shortlived
+		}
+	}
+	encode zstd gzip
+	header -Server
+	reverse_proxy 127.0.0.1:3001
+}
