@@ -23,10 +23,23 @@ test("a signed offer becomes a verified report and survives reload", async ({
   await expect(
     page.getByRole("heading", { name: "Agreement kept. Report verified." }),
   ).toBeVisible();
+  let resumeRefresh!: () => void;
+  const refreshGate = new Promise<void>((resolve) => {
+    resumeRefresh = resolve;
+  });
+  const runId = new URL(page.url()).pathname.split("/").pop();
+  await page.route(`**/api/rfqs/${runId}`, async (route) => {
+    await refreshGate;
+    await route.continue();
+  });
   const downloadEvent = page.waitForEvent("download");
   await page.getByRole("button", { name: "Download report" }).click();
   const download = await downloadEvent;
   expect(download.suggestedFilename()).toBe("proofbid-report.json");
+  await expect(
+    page.getByRole("button", { name: "Export private proof" }),
+  ).toBeDisabled();
+  resumeRefresh();
   const proofEvent = page.waitForEvent("download");
   await page.getByRole("button", { name: "Export private proof" }).click();
   const proofDownload = await proofEvent;

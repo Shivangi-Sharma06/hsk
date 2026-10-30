@@ -811,6 +811,7 @@ export function App() {
                       {run.deliveryVerified && (
                         <button
                           className="primary"
+                          disabled={!!busy}
                           onClick={() =>
                             void action("Downloading report", () =>
                               download(
@@ -838,6 +839,7 @@ export function App() {
                       )}
                       <button
                         className="text-button"
+                        disabled={!!busy}
                         onClick={() =>
                           void action("Exporting proof", () =>
                             download(
