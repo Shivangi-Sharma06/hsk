@@ -41,6 +41,7 @@ export function createApp(
   const engine = options.engine ?? new Engine(readConfig());
   const { config, store } = engine;
   const app = Fastify({
+    trustProxy: "127.0.0.1",
     logger: options.logger
       ? {
           redact: [

@@ -33,3 +33,33 @@ it("reports simulator readiness and requires owner/origin", async () => {
     rmSync(dir, { recursive: true });
   }
 });
+it("trusts client addresses only when forwarded by the local reverse proxy", async () => {
+  const dir = mkdtempSync(join(tmpdir(), "proofbid-proxy-"));
+  const engine = new Engine(readConfig({ DATA_DIR: dir }));
+  const app = createApp({ engine, startWorker: false });
+  app.get("/test/proxy-ip", async (req) => ({ ip: req.ip }));
+  try {
+    const forwarded = { "x-forwarded-for": "198.51.100.7" };
+    expect(
+      (
+        await app.inject({
+          url: "/test/proxy-ip",
+          remoteAddress: "127.0.0.1",
+          headers: forwarded,
+        })
+      ).json(),
+    ).toEqual({ ip: "198.51.100.7" });
+    expect(
+      (
+        await app.inject({
+          url: "/test/proxy-ip",
+          remoteAddress: "203.0.113.9",
+          headers: forwarded,
+        })
+      ).json(),
+    ).toEqual({ ip: "203.0.113.9" });
+  } finally {
+    await app.close();
+    rmSync(dir, { recursive: true });
+  }
+});
